@@ -1,13 +1,14 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaCrossfit.Models
 {
-    public class ProfileModel : BaseModel
+    public class Profile : BaseModel
     {
         public int IdProfile { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }
         public bool Active { get; set; }
+
 
     }
 }

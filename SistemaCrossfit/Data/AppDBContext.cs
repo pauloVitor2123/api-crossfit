@@ -8,11 +8,17 @@ namespace SistemaCrossfit.Data
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 
-        public DbSet<ProfileModel> Profile { get; set; }
+        public DbSet<Profile> Profile { get; set; }
+        public DbSet<Student> Student { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new AddressMap());
+            modelBuilder.ApplyConfiguration(new AdminMap());
+            modelBuilder.ApplyConfiguration(new GenreMap());
+            modelBuilder.ApplyConfiguration(new ProfessorMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());
+            modelBuilder.ApplyConfiguration(new StudentMap());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -22,16 +28,17 @@ namespace SistemaCrossfit.Data
             {
                 var entity = entry.Entity;
 
-                if(entry.State == EntityState.Deleted)
+                if (entry.State == EntityState.Deleted)
                 {
                     entry.State = EntityState.Modified;
                     entity.GetType().GetProperty("DeletedAt")?.SetValue(entity, DateTime.Now);
-                }else if(entry.State == EntityState.Added)
+                }
+                else if (entry.State == EntityState.Added)
                 {
                     entity.GetType().GetProperty("CreatedAt")?.SetValue(entity, DateTime.Now);
                     entity.GetType().GetProperty("UpdatedAt")?.SetValue(entity, DateTime.Now);
                 }
-                else if(entry.State == EntityState.Modified)
+                else if (entry.State == EntityState.Modified)
                 {
                     entity.GetType().GetProperty("UpdatedAt")?.SetValue(entity, DateTime.Now);
                 }

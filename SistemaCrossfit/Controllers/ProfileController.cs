@@ -8,41 +8,41 @@ namespace SistemaCrossfit.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-        private readonly IProfileRepository _profileRepository;
-        public ProfileController(IProfileRepository profileRepository)
+        private readonly IBaseRepository<Profile> _profileRepository;
+        public ProfileController(IBaseRepository<Profile> profileRepository)
         {
             this._profileRepository = profileRepository;
         }
         [HttpGet]
-        public async Task<ActionResult<List<ProfileModel>>> GetProfiles()
+        public async Task<ActionResult<List<Profile>>> GetProfiles()
         {
-            List<ProfileModel> profiles = await _profileRepository.GetAll();
+            List<Profile> profiles = await _profileRepository.GetAll();
             return Ok(profiles);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProfileModel>> GetProfileById(int id)
+        public async Task<ActionResult<Profile>> GetProfileById(int id)
         {
-            ProfileModel profile = await _profileRepository.GetById(id);
+            Profile profile = await _profileRepository.GetById(id);
             return Ok(profile);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProfileModel>> GetProfileById([FromBody] ProfileModel profile)
+        public async Task<ActionResult<Profile>> GetProfileById([FromBody] Profile profile)
         {
-            ProfileModel p = await _profileRepository.Create(profile);
+            Profile p = await _profileRepository.Create(profile);
             return Ok(p);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ProfileModel>> UpdatedProfile(int id, [FromBody] ProfileModel profile)
+        public async Task<ActionResult<Profile>> UpdatedProfile(int id, [FromBody] Profile profile)
         {
-            ProfileModel p = await _profileRepository.Update(profile, id);
+            Profile p = await _profileRepository.Update(profile, id);
             return Ok(p);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProfileModel>> DeleteById(int id)
+        public async Task<ActionResult<Profile>> DeleteById(int id)
         {
             Boolean deleted = await _profileRepository.Delete(id);
             return Ok(deleted);

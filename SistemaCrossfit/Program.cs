@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
+using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 
@@ -25,7 +26,7 @@ namespace SistemaCrossfit
                 );
 
 
-            builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            builder.Services.AddScoped<IBaseRepository<Profile>, ProfileRepository>();
 
             var app = builder.Build();
 
