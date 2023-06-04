@@ -5,7 +5,7 @@ using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Repositories
 {
-    public class ProfileRepository : IBaseRepository<Profile>
+    public class ProfileRepository : IProfileRepository
     {
         private readonly AppDBContext _dbContext;
         public ProfileRepository(AppDBContext appDbContext)
@@ -23,7 +23,7 @@ namespace SistemaCrossfit.Repositories
             Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == id);
             if (profile == null)
             {
-                throw new Exception("User not found!");
+                throw new Exception("Profile not found!");
             }
 
             return profile;
@@ -41,7 +41,7 @@ namespace SistemaCrossfit.Repositories
             Profile profileUpdated = await _dbContext.Profile.FirstOrDefaultAsync(p => p.IdProfile == id);
             if (profileUpdated == null)
             {
-                throw new Exception("User not found!");
+                throw new Exception("Profile not found!");
             }
 
             profileUpdated.NormalizedName = profile.NormalizedName;
@@ -58,7 +58,7 @@ namespace SistemaCrossfit.Repositories
             Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == id);
             if (profile == null)
             {
-                throw new Exception("User not found!");
+                throw new Exception("Profile not found!");
             }
 
             _dbContext.Profile.Remove(profile);
@@ -67,5 +67,15 @@ namespace SistemaCrossfit.Repositories
             return true;
         }
 
+        public async Task<Profile> GetByNormalizedName(string normalizedName)
+        {
+            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.NormalizedName == normalizedName);
+            if (profile == null)
+            {
+                throw new Exception("Profile not found!");
+            }
+
+            return profile;
+        }
     }
 }

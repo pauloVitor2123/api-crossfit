@@ -17,7 +17,6 @@ namespace SistemaCrossfit.Models
 
         [ForeignKey("id_profile")]
         public int IdProfile { get; set; }
-        [JsonIgnore]
         public Profile? Profile { get; }
 
     }

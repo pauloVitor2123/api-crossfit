@@ -16,7 +16,6 @@ namespace SistemaCrossfit.Models
         [Column("id_address")]
         public int? IdAddress { get; set; }
         [SwaggerSchema]
-        [JsonIgnore]
         public Address? Address { get; set; }
 
         [SwaggerSchema]

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.Models;
+using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,8 +10,8 @@ namespace SistemaCrossfit.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-        private readonly IBaseRepository<Profile> _profileRepository;
-        public ProfileController(IBaseRepository<Profile> profileRepository)
+        private readonly IProfileRepository _profileRepository;
+        public ProfileController(ProfileRepository profileRepository)
         {
             this._profileRepository = profileRepository;
         }

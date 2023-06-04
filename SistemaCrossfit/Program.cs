@@ -26,9 +26,9 @@ namespace SistemaCrossfit
                 );
 
 
-            builder.Services.AddScoped<IBaseRepository<Profile>, ProfileRepository>();
             builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
-            builder.Services.AddScoped<IBaseRepository<Student>, StudentRepository>();
+            builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            builder.Services.AddScoped<StudentRepository, StudentRepository>();
 
 
             var app = builder.Build();

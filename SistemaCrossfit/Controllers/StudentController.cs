@@ -9,8 +9,8 @@ namespace SistemaCrossfit.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly IBaseRepository<Student> _studentRepository;
-        public StudentController(IBaseRepository<Student> studentRepository)
+        private readonly IStudentRepository _studentRepository;
+        public StudentController(StudentRepository studentRepository)
         {
             this._studentRepository = studentRepository;
         }
@@ -47,6 +47,26 @@ namespace SistemaCrossfit.Controllers
         {
             Boolean deleted = await _studentRepository.Delete(id);
             return Ok(deleted);
+        }
+
+        public class BlockRequest
+        {
+            public string BlockDescription { get; set; }
+        }
+
+
+        [HttpPatch("block/{id}")]
+        public async Task<ActionResult<Student>> BlockById(int id, [FromBody] BlockRequest blockRequest)
+        {
+            Boolean blocked = await _studentRepository.Block(id, blockRequest.BlockDescription);
+            return Ok(blocked);
+        }
+
+        [HttpPatch("unblock/{id}")]
+        public async Task<ActionResult<Student>> UnblockById(int id)
+        {
+            Boolean unblocked = await _studentRepository.Unblock(id);
+            return Ok(unblocked);
         }
     }
 }
