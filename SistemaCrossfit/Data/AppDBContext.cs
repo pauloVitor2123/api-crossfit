@@ -10,6 +10,7 @@ namespace SistemaCrossfit.Data
 
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Student> Student { get; set; }
+        public DbSet<Genre> Genre { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -27,6 +27,9 @@ namespace SistemaCrossfit
 
 
             builder.Services.AddScoped<IBaseRepository<Profile>, ProfileRepository>();
+            builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
+            builder.Services.AddScoped<IBaseRepository<Student>, StudentRepository>();
+
 
             var app = builder.Build();
 
@@ -44,7 +47,11 @@ namespace SistemaCrossfit
 
             app.MapControllers();
 
+            // Seed database
+            AppDbInitializer.Seed(app);
+
             app.Run();
+
         }
     }
 }

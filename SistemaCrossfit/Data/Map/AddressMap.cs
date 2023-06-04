@@ -34,7 +34,7 @@ namespace SistemaCrossfit.Data.Map
             // Configuração do relacionamento um-para-um com Student
             builder.HasOne<Student>()
                 .WithOne(x => x.Address)
-                .HasForeignKey<Student>(x => x.IdStudent)
+                .HasForeignKey<Student>(x => x.IdAddress)
                 .IsRequired(false);
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SistemaCrossfit.Migrations
 {
-    public partial class initial : Migration
+    public partial class initialDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,7 +42,7 @@ namespace SistemaCrossfit.Migrations
                     active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -123,15 +123,16 @@ namespace SistemaCrossfit.Migrations
                 name: "Student",
                 columns: table => new
                 {
-                    id_student = table.Column<int>(type: "int", nullable: false),
+                    id_student = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     id_profile = table.Column<int>(type: "int", nullable: false),
                     id_genre = table.Column<int>(type: "int", nullable: false),
-                    id_address = table.Column<int>(type: "int", nullable: false),
+                    id_address = table.Column<int>(type: "int", nullable: true),
+                    birth_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     social_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    birth_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_blocked = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     block_description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -142,8 +143,8 @@ namespace SistemaCrossfit.Migrations
                 {
                     table.PrimaryKey("PK_Student", x => x.id_student);
                     table.ForeignKey(
-                        name: "FK_Student_Address_id_student",
-                        column: x => x.id_student,
+                        name: "FK_Student_Address_id_address",
+                        column: x => x.id_address,
                         principalTable: "Address",
                         principalColumn: "id_address");
                     table.ForeignKey(
@@ -169,6 +170,13 @@ namespace SistemaCrossfit.Migrations
                 name: "IX_Professor_id_profile",
                 table: "Professor",
                 column: "id_profile");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Student_id_address",
+                table: "Student",
+                column: "id_address",
+                unique: true,
+                filter: "[id_address] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Student_id_genre",

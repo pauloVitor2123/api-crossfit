@@ -8,10 +8,11 @@ namespace SistemaCrossfit.Repositories
     public class ProfileRepository : IBaseRepository<Profile>
     {
         private readonly AppDBContext _dbContext;
-        public ProfileRepository(AppDBContext appDbContext) {
+        public ProfileRepository(AppDBContext appDbContext)
+        {
             _dbContext = appDbContext;
         }
-      
+
         public async Task<List<Profile>> GetAll()
         {
             return await _dbContext.Profile.ToListAsync();
@@ -20,7 +21,7 @@ namespace SistemaCrossfit.Repositories
         public async Task<Profile> GetById(int id)
         {
             Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == id);
-            if(profile == null)
+            if (profile == null)
             {
                 throw new Exception("User not found!");
             }
@@ -45,6 +46,7 @@ namespace SistemaCrossfit.Repositories
 
             profileUpdated.NormalizedName = profile.NormalizedName;
             profileUpdated.Name = profile.Name;
+            profileUpdated.Active = profile.Active;
 
             await _dbContext.SaveChangesAsync();
 
@@ -64,6 +66,6 @@ namespace SistemaCrossfit.Repositories
 
             return true;
         }
-        
+
     }
 }

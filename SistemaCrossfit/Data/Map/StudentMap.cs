@@ -25,7 +25,7 @@ namespace SistemaCrossfit.Data.Map
             // relationship 1 to 1
             builder.HasOne(x => x.Address)
                .WithOne()
-               .HasForeignKey<Student>(x => x.IdStudent);
+               .HasForeignKey<Student>(x => x.IdAddress);
 
             // relationship 1 to Many
             builder.HasOne(x => x.Genre)

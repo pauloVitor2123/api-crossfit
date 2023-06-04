@@ -12,8 +12,8 @@ using SistemaCrossfit.Data;
 namespace SistemaCrossfit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20230529233748_initial")]
-    partial class initial
+    [Migration("20230604003255_genre-profile-no-have-default-value")]
+    partial class genreprofilenohavedefaultvalue
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -151,9 +151,7 @@ namespace SistemaCrossfit.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdGenre"), 1L, 1);
 
                     b.Property<bool>("Active")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
-                        .HasDefaultValue(true)
                         .HasColumnName("active");
 
                     b.Property<DateTime>("CreatedAt")
@@ -253,9 +251,7 @@ namespace SistemaCrossfit.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProfile"), 1L, 1);
 
                     b.Property<bool>("Active")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
-                        .HasDefaultValue(true)
                         .HasColumnName("active");
 
                     b.Property<DateTime>("CreatedAt")
@@ -297,6 +293,8 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id_student");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdStudent"), 1L, 1);
+
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("birth_date");
@@ -320,7 +318,7 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("email");
 
-                    b.Property<int>("IdAddress")
+                    b.Property<int?>("IdAddress")
                         .HasColumnType("int")
                         .HasColumnName("id_address");
 
@@ -361,6 +359,10 @@ namespace SistemaCrossfit.Migrations
 
                     b.HasKey("IdStudent");
 
+                    b.HasIndex("IdAddress")
+                        .IsUnique()
+                        .HasFilter("[id_address] IS NOT NULL");
+
                     b.HasIndex("IdGenre");
 
                     b.HasIndex("IdProfile");
@@ -392,6 +394,10 @@ namespace SistemaCrossfit.Migrations
 
             modelBuilder.Entity("SistemaCrossfit.Models.Student", b =>
                 {
+                    b.HasOne("SistemaCrossfit.Models.Address", "Address")
+                        .WithOne()
+                        .HasForeignKey("SistemaCrossfit.Models.Student", "IdAddress");
+
                     b.HasOne("SistemaCrossfit.Models.Genre", "Genre")
                         .WithMany("Students")
                         .HasForeignKey("IdGenre")
@@ -403,10 +409,6 @@ namespace SistemaCrossfit.Migrations
                         .HasForeignKey("IdProfile")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SistemaCrossfit.Models.Address", "Address")
-                        .WithOne()
-                        .HasForeignKey("SistemaCrossfit.Models.Student", "IdStudent");
 
                     b.Navigation("Address");
 

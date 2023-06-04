@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SistemaCrossfit.Controllers
 {
@@ -28,7 +29,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Profile>> GetProfileById([FromBody] Profile profile)
+        public async Task<ActionResult<Profile>> CreateProfile([FromBody] Profile profile)
         {
             Profile p = await _profileRepository.Create(profile);
             return Ok(p);
