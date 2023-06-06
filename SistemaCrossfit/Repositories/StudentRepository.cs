@@ -28,27 +28,45 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
+            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == student.IdUser);
+            if (user == null)
+            {
+                throw new Exception("User not found!");
+            }
+
+            student.User = user;
             return student;
         }
 
         public async Task<Student> Create(CreateStudent httpStudent)
         {
+            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(s => s.NormalizedName == "STUDENT");
+            if (profile == null)
+            {
+                throw new Exception("Profile not found!");
+            }
+
             User user = new User();
             user.Name = httpStudent.Name;
             user.Email = httpStudent.Email;
             user.Password = httpStudent.Password;
             user.SocialName = httpStudent.SocialName;
-            user.IdProfile = httpStudent.IdProfile;
+            user.IdProfile = profile.IdProfile;
 
             await _dbContext.User.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
 
             Student student = new Student();
             student.IdAddress = httpStudent.IdAddress;
             student.IdGenre = httpStudent.IdGenre;
             student.BirthDate = httpStudent.BirthDate;
+            student.IdUser = user.IdUser;
+            student.User = user;
 
             await _dbContext.Student.AddAsync(student);
             await _dbContext.SaveChangesAsync();
+
+
             return student;
         }
 
@@ -60,17 +78,22 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
-            studentUpdated.User.Name = httpStudent.Name;
-            studentUpdated.User.Email = httpStudent.Email;
-            studentUpdated.User.Password = httpStudent.Password;
-            studentUpdated.User.SocialName = httpStudent.SocialName;
-            studentUpdated.User.IdProfile = httpStudent.IdProfile;
+            User userUpdated = await _dbContext.User.FirstOrDefaultAsync(s => s.IdUser == studentUpdated.IdUser);
+            if (userUpdated == null)
+            {
+                throw new Exception("User not found!");
+            }
+
+            userUpdated.Name = httpStudent.Name;
+            userUpdated.Email = httpStudent.Email;
+            userUpdated.Password = httpStudent.Password;
+            userUpdated.SocialName = httpStudent.SocialName;
+
 
             studentUpdated.IdAddress = httpStudent.IdAddress;
             studentUpdated.IdGenre = httpStudent.IdGenre;
             studentUpdated.BirthDate = httpStudent.BirthDate;
 
-            await _dbContext.Student.AddAsync(studentUpdated);
             await _dbContext.SaveChangesAsync();
             return studentUpdated;
         }
@@ -83,6 +106,13 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
+            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == student.IdUser);
+            if (user == null)
+            {
+                throw new Exception("User not found!");
+            }
+
+            _dbContext.User.Remove(user);
             _dbContext.Student.Remove(student);
             await _dbContext.SaveChangesAsync();
 

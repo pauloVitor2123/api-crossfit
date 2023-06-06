@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
+using System.Data;
 
 namespace SistemaCrossfit.Controllers
 {
@@ -14,6 +16,7 @@ namespace SistemaCrossfit.Controllers
             this._genreRepository = GenreRepository;
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<Genre>>> GetGenres()
         {
             List<Genre> genres = await _genreRepository.GetAll();
@@ -21,6 +24,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Genre>> GetGenreById(int id)
         {
             Genre genre = await _genreRepository.GetById(id);
@@ -28,6 +32,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Genre>> CreateGenre([FromBody] Genre Genre)
         {
             Genre g = await _genreRepository.Create(Genre);
@@ -35,6 +40,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Genre>> UpdatedGenre(int id, [FromBody] Genre genre)
         {
             Genre g = await _genreRepository.Update(genre, id);
@@ -42,6 +48,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Genre>> DeleteGenreById(int id)
         {
             Boolean deleted = await _genreRepository.Delete(id);

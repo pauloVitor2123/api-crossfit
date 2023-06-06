@@ -10,7 +10,6 @@
         public string? BlockDescription { get; set; }
 
         /*-------- User Props ----------*/
-        public int IdProfile { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }

@@ -4,9 +4,9 @@ using SistemaCrossfit.Models;
 
 namespace SistemaCrossfit.Data.Map
 {
-    public class UserMap<TEntityUser> : BaseMap<TEntityUser> where TEntityUser : User
+    public class UserMap : BaseMap<User>
     {
-        public override void Configure(EntityTypeBuilder<TEntityUser> builder)
+        public override void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(x => x.IdUser);
             builder.Property(x => x.IdUser)
@@ -36,13 +36,13 @@ namespace SistemaCrossfit.Data.Map
             builder.HasOne(x => x.Profile)
             .WithMany()
             .HasForeignKey(x => x.IdProfile)
-            .IsRequired();
+            .IsRequired();/*
             // relationship 1 to One - One to 1
-            builder.HasOne(x => x.Student).WithOne().HasForeignKey<User>(x => x.Student).IsRequired(false);
+            builder.HasOne(x => x.Student).WithOne().HasForeignKey<User>(x => x.IdStudent).IsRequired(false);
             // relationship 1 to One - One to 1
-            builder.HasOne(x => x.Admin).WithOne().HasForeignKey<User>(x => x.Admin).IsRequired(false);
+            builder.HasOne(x => x.Admin).WithOne().HasForeignKey<User>(x => x.IdAdmin).IsRequired(false);
             // relationship 1 to One - One to 1
-            builder.HasOne(x => x.Professor).WithOne().HasForeignKey<User>(x => x.Professor).IsRequired(false);
+            builder.HasOne(x => x.Professor).WithOne().HasForeignKey<User>(x => x.IdProfessor).IsRequired(false);*/
 
 
             base.Configure(builder);

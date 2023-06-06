@@ -1,9 +1,10 @@
-﻿using SistemaCrossfit.Models;
+﻿using SistemaCrossfit.DTO.User;
+using SistemaCrossfit.Models;
 
 namespace SistemaCrossfit.Repositories.Interface
 {
     public interface IUserRepository
     {
-        Task<User> login(User user);
+        Task<dynamic> Login(LoginInput login);
     }
 }

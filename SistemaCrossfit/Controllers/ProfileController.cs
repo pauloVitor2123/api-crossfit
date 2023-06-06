@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.Models;
-using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace SistemaCrossfit.Controllers
 {
@@ -11,11 +10,12 @@ namespace SistemaCrossfit.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly IProfileRepository _profileRepository;
-        public ProfileController(ProfileRepository profileRepository)
+        public ProfileController(IProfileRepository profileRepository)
         {
             this._profileRepository = profileRepository;
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<Profile>>> GetProfiles()
         {
             List<Profile> profiles = await _profileRepository.GetAll();
@@ -23,6 +23,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Profile>> GetProfileById(int id)
         {
             Profile profile = await _profileRepository.GetById(id);
@@ -30,6 +31,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Profile>> CreateProfile([FromBody] Profile profile)
         {
             Profile p = await _profileRepository.Create(profile);
@@ -37,6 +39,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Profile>> UpdatedProfile(int id, [FromBody] Profile profile)
         {
             Profile p = await _profileRepository.Update(profile, id);
@@ -44,6 +47,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Profile>> DeleteProfileById(int id)
         {
             Boolean deleted = await _profileRepository.Delete(id);

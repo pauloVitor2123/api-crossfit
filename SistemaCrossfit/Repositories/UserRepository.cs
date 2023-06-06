@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
+using SistemaCrossfit.DTO.User;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
+using SistemaCrossfit.Services;
 
 namespace SistemaCrossfit.Repositories
 {
@@ -13,27 +15,29 @@ namespace SistemaCrossfit.Repositories
             _dbContext = appDbContext;
         }
 
-        public Task<User> login(User user)
-        {
-            throw new NotImplementedException();
-        }
 
-
-        /*public async Task<User> login(User user)
+        public async Task<dynamic> Login(LoginInput login)
         {
-            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdStudent == id);
+            User user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == login.Email);
             if (user == null)
             {
-                throw new Exception("Student not found!");
+                throw new Exception("Email or password not found!");
             }
 
-            var token = TokenService.GenerateToken(user);
+            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
+            if (profile == null)
+            {
+                throw new Exception("profile not found!");
+            }
+
+            var token = TokenService.GenerateToken(user, profile);
             user.Password = "";
+
             return new
             {
-                user,
-                token
-            }
-        }*/
+                user = user,
+                token = token
+            };
+        }
     }
 }

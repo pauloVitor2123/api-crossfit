@@ -22,6 +22,7 @@ namespace SistemaCrossfit.Data
             modelBuilder.ApplyConfiguration(new AdminMap());
             modelBuilder.ApplyConfiguration(new GenreMap());
             modelBuilder.ApplyConfiguration(new ProfessorMap());
+            modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());
             modelBuilder.ApplyConfiguration(new StudentMap());
             base.OnModelCreating(modelBuilder);

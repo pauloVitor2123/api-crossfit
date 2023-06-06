@@ -7,6 +7,7 @@ using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace SistemaCrossfit
 {
@@ -19,7 +20,10 @@ namespace SistemaCrossfit
             // Add services to the container.
 
             builder.Services.AddCors();
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+            // Add authentication service
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             builder.Services.AddAuthentication(x =>
             {
@@ -51,8 +55,9 @@ namespace SistemaCrossfit
 
             builder.Services.AddScoped<IBaseRepository<Address>, AddressRepository>();
             builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
-            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 
             var app = builder.Build();

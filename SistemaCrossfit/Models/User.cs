@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaCrossfit.Models
@@ -8,14 +9,17 @@ namespace SistemaCrossfit.Models
         [Key]
         [Column("id_user")]
         public int IdUser { get; set; }
-        /*[Column("id_admin")]*/
-        /*        public int? IdAdmin { get; set; }
-                [Column("id_student")]
-                public int? IdStudent { get; set; }
-                [Column("id_professor")]
-                public int? IdProfessor { get; set; }*/
+        /*[ForeignKey("id_admin")]
+        [Column("id_admin")]
+        public int? IdAdmin { get; set; }
+        [ForeignKey("id_student")]
+        [Column("id_student")]
+        public int? IdStudent { get; set; }
+        [ForeignKey("id_professor")]
+        [Column("id_professor")]
+        public int? IdProfessor { get; set; }*/
 
-        [ForeignKey("Profile")]
+        [ForeignKey("id_profile")]
         [Column("id_profile")]
         public int IdProfile { get; set; }
         [Column("email")]
@@ -32,6 +36,5 @@ namespace SistemaCrossfit.Models
         public Student? Student { get; set; }
         public Professor? Professor { get; set; }
         public Profile Profile { get; set; }
-
     }
 }
