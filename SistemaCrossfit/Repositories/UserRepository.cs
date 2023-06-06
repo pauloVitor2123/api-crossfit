@@ -15,6 +15,45 @@ namespace SistemaCrossfit.Repositories
             _dbContext = appDbContext;
         }
 
+        public async Task<User> Create(User user, string normalizedNameProfile)
+        {
+            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(s => s.NormalizedName == normalizedNameProfile);
+            if (profile == null)
+            {
+                throw new Exception("Profile not found!");
+            }
+
+            user.IdProfile = profile.IdProfile;
+
+            await _dbContext.User.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            return user;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == id);
+            if (user == null)
+            {
+                throw new Exception("User not found!");
+            }
+
+            _dbContext.User.Remove(user);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<User> GetById(int id)
+        {
+            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == id);
+            if (user == null)
+            {
+                throw new Exception("User not found!");
+            }
+            return user;
+        }
 
         public async Task<dynamic> Login(LoginInput login)
         {
@@ -39,5 +78,7 @@ namespace SistemaCrossfit.Repositories
                 token = token
             };
         }
+
+
     }
 }

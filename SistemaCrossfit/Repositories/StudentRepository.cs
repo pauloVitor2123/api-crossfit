@@ -17,7 +17,15 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<List<Student>> GetAll()
         {
-            return await _dbContext.Student.ToListAsync();
+            UserRepository userRepository = new UserRepository(_dbContext);
+            List<Student> studentList = await _dbContext.Student.ToListAsync();
+            foreach (var student in studentList)
+            {
+                student.User = await userRepository.GetById(student.IdUser);
+            }
+
+
+            return studentList;
         }
 
         public async Task<Student> GetById(int id)
@@ -40,28 +48,22 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<Student> Create(CreateStudent httpStudent)
         {
-            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(s => s.NormalizedName == "STUDENT");
-            if (profile == null)
-            {
-                throw new Exception("Profile not found!");
-            }
 
             User user = new User();
             user.Name = httpStudent.Name;
             user.Email = httpStudent.Email;
             user.Password = httpStudent.Password;
             user.SocialName = httpStudent.SocialName;
-            user.IdProfile = profile.IdProfile;
 
-            await _dbContext.User.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+            UserRepository userRepository = new UserRepository(_dbContext);
+            User userInserted = await userRepository.Create(user, "STUDENT");
 
             Student student = new Student();
             student.IdAddress = httpStudent.IdAddress;
             student.IdGenre = httpStudent.IdGenre;
             student.BirthDate = httpStudent.BirthDate;
-            student.IdUser = user.IdUser;
-            student.User = user;
+            student.IdUser = userInserted.IdUser;
+            student.User = userInserted;
 
             await _dbContext.Student.AddAsync(student);
             await _dbContext.SaveChangesAsync();
@@ -83,6 +85,7 @@ namespace SistemaCrossfit.Repositories
             {
                 throw new Exception("User not found!");
             }
+
 
             userUpdated.Name = httpStudent.Name;
             userUpdated.Email = httpStudent.Email;
@@ -106,13 +109,10 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
-            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == student.IdUser);
-            if (user == null)
-            {
-                throw new Exception("User not found!");
-            }
 
-            _dbContext.User.Remove(user);
+            UserRepository userRepository = new UserRepository(_dbContext);
+            await userRepository.Delete(student.IdUser);
+
             _dbContext.Student.Remove(student);
             await _dbContext.SaveChangesAsync();
 

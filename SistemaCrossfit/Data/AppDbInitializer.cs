@@ -29,6 +29,22 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(profiles.ToArray());
                     Console.WriteLine("Genre seeds created successfully!");
                 }
+                await context.SaveChangesAsync();
+
+                if (!context.User.Any())
+                {
+                    var users = UserFactory.CreateSeedUsers();
+                    await context.AddRangeAsync(users.ToArray());
+                    Console.WriteLine("Users seeds created successfully!");
+                }
+                await context.SaveChangesAsync();
+
+                if (!context.Student.Any())
+                {
+                    var students = StudentFactory.CreateSeedStudents();
+                    await context.AddRangeAsync(students.ToArray());
+                    Console.WriteLine("Students seeds created successfully!");
+                }
 
 
                 await context.SaveChangesAsync();
