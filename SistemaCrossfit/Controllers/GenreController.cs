@@ -8,43 +8,43 @@ namespace SistemaCrossfit.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private readonly IBaseRepository<Genre> _GenreRepository;
+        private readonly IBaseRepository<Genre> _genreRepository;
         public GenreController(IBaseRepository<Genre> GenreRepository)
         {
-            this._GenreRepository = GenreRepository;
+            this._genreRepository = GenreRepository;
         }
         [HttpGet]
         public async Task<ActionResult<List<Genre>>> GetGenres()
         {
-            List<Genre> Genres = await _GenreRepository.GetAll();
-            return Ok(Genres);
+            List<Genre> genres = await _genreRepository.GetAll();
+            return Ok(genres);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Genre>> GetGenreById(int id)
         {
-            Genre Genre = await _GenreRepository.GetById(id);
-            return Ok(Genre);
+            Genre genre = await _genreRepository.GetById(id);
+            return Ok(genre);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Genre>> Create([FromBody] Genre Genre)
+        public async Task<ActionResult<Genre>> CreateGenre([FromBody] Genre Genre)
         {
-            Genre p = await _GenreRepository.Create(Genre);
-            return Ok(p);
+            Genre g = await _genreRepository.Create(Genre);
+            return Ok(g);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Genre>> UpdatedGenre(int id, [FromBody] Genre Genre)
+        public async Task<ActionResult<Genre>> UpdatedGenre(int id, [FromBody] Genre genre)
         {
-            Genre g = await _GenreRepository.Update(Genre, id);
+            Genre g = await _genreRepository.Update(genre, id);
             return Ok(g);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Genre>> DeleteById(int id)
+        public async Task<ActionResult<Genre>> DeleteGenreById(int id)
         {
-            Boolean deleted = await _GenreRepository.Delete(id);
+            Boolean deleted = await _genreRepository.Delete(id);
             return Ok(deleted);
         }
     }

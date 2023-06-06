@@ -1,21 +1,15 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaCrossfit.Models
 {
     public class Profile : BaseModel
     {
-        public Profile()
-        {
-            this.Active = true;
-        }
-        [SwaggerSchema]
+        [Key]
+        [Column("id_profile")]
         public int IdProfile { get; set; }
-        [SwaggerSchema]
         public string Name { get; set; }
-        [SwaggerSchema]
         public string NormalizedName { get; set; }
-        [SwaggerSchema]
         public bool Active { get; set; }
     }
 }

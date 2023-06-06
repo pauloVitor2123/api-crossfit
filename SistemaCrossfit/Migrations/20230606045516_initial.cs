@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SistemaCrossfit.Migrations
 {
-    public partial class initialDB : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,10 +39,10 @@ namespace SistemaCrossfit.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     normalized_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    active = table.Column<bool>(type: "bit", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,7 @@ namespace SistemaCrossfit.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     normalized_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    active = table.Column<bool>(type: "bit", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -68,16 +68,38 @@ namespace SistemaCrossfit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    id_user = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id_profile = table.Column<int>(type: "int", nullable: false),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    social_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.id_user);
+                    table.ForeignKey(
+                        name: "FK_User_Profile_id_profile",
+                        column: x => x.id_profile,
+                        principalTable: "Profile",
+                        principalColumn: "id_profile",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Admin",
                 columns: table => new
                 {
                     id_admin = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    id_profile = table.Column<int>(type: "int", nullable: false),
-                    email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    social_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    id_user = table.Column<int>(type: "int", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -86,10 +108,10 @@ namespace SistemaCrossfit.Migrations
                 {
                     table.PrimaryKey("PK_Admin", x => x.id_admin);
                     table.ForeignKey(
-                        name: "FK_Admin_Profile_id_profile",
-                        column: x => x.id_profile,
-                        principalTable: "Profile",
-                        principalColumn: "id_profile",
+                        name: "FK_Admin_User_id_user",
+                        column: x => x.id_user,
+                        principalTable: "User",
+                        principalColumn: "id_user",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -99,23 +121,19 @@ namespace SistemaCrossfit.Migrations
                 {
                     id_professor = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    id_profile = table.Column<int>(type: "int", nullable: false),
-                    email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    social_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    id_user = table.Column<int>(type: "int", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Professor", x => x.id_professor);
                     table.ForeignKey(
-                        name: "FK_Professor_Profile_id_profile",
-                        column: x => x.id_profile,
-                        principalTable: "Profile",
-                        principalColumn: "id_profile",
+                        name: "FK_Professor_User_id_user",
+                        column: x => x.id_user,
+                        principalTable: "User",
+                        principalColumn: "id_user",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -125,14 +143,10 @@ namespace SistemaCrossfit.Migrations
                 {
                     id_student = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    id_profile = table.Column<int>(type: "int", nullable: false),
-                    id_genre = table.Column<int>(type: "int", nullable: false),
                     id_address = table.Column<int>(type: "int", nullable: true),
+                    id_user = table.Column<int>(type: "int", nullable: false),
+                    id_genre = table.Column<int>(type: "int", nullable: false),
                     birth_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    social_name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     is_blocked = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     block_description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -154,22 +168,24 @@ namespace SistemaCrossfit.Migrations
                         principalColumn: "id_genre",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Student_Profile_id_profile",
-                        column: x => x.id_profile,
-                        principalTable: "Profile",
-                        principalColumn: "id_profile",
+                        name: "FK_Student_User_id_user",
+                        column: x => x.id_user,
+                        principalTable: "User",
+                        principalColumn: "id_user",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Admin_id_profile",
+                name: "IX_Admin_id_user",
                 table: "Admin",
-                column: "id_profile");
+                column: "id_user",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Professor_id_profile",
+                name: "IX_Professor_id_user",
                 table: "Professor",
-                column: "id_profile");
+                column: "id_user",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Student_id_address",
@@ -184,8 +200,14 @@ namespace SistemaCrossfit.Migrations
                 column: "id_genre");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Student_id_profile",
+                name: "IX_Student_id_user",
                 table: "Student",
+                column: "id_user",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_id_profile",
+                table: "User",
                 column: "id_profile");
         }
 
@@ -205,6 +227,9 @@ namespace SistemaCrossfit.Migrations
 
             migrationBuilder.DropTable(
                 name: "Genre");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Profile");

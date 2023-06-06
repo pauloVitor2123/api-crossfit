@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaCrossfit.Models
 {
     public class Address : BaseModel
     {
-        public int IdAddress { get; set; }
+        [Key]
+        public virtual int IdAddress { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public string? City { get; set; }

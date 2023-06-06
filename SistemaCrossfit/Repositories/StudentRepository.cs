@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
+using SistemaCrossfit.DTO.Student;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
+using System.Net;
 
 namespace SistemaCrossfit.Repositories
 {
@@ -15,10 +17,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<List<Student>> GetAll()
         {
-            ProfileRepository profileRepository = new ProfileRepository(_dbContext);
-            Profile profile = await profileRepository.GetByNormalizedName("STUDENT");
-
-            return await _dbContext.Student.Where(student => student.IdProfile == profile.IdProfile).ToListAsync();
+            return await _dbContext.Student.ToListAsync();
         }
 
         public async Task<Student> GetById(int id)
@@ -32,14 +31,28 @@ namespace SistemaCrossfit.Repositories
             return student;
         }
 
-        public async Task<Student> Create(Student student)
+        public async Task<Student> Create(CreateStudent httpStudent)
         {
+            User user = new User();
+            user.Name = httpStudent.Name;
+            user.Email = httpStudent.Email;
+            user.Password = httpStudent.Password;
+            user.SocialName = httpStudent.SocialName;
+            user.IdProfile = httpStudent.IdProfile;
+
+            await _dbContext.User.AddAsync(user);
+
+            Student student = new Student();
+            student.IdAddress = httpStudent.IdAddress;
+            student.IdGenre = httpStudent.IdGenre;
+            student.BirthDate = httpStudent.BirthDate;
+
             await _dbContext.Student.AddAsync(student);
             await _dbContext.SaveChangesAsync();
             return student;
         }
 
-        public async Task<Student> Update(Student student, int id)
+        public async Task<Student> Update(CreateStudent httpStudent, int id)
         {
             Student studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
             if (studentUpdated == null)
@@ -47,14 +60,18 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
-            studentUpdated.Name = student.Name;
-            studentUpdated.Email = student.Email;
-            studentUpdated.IdGenre = student.IdGenre;
-            studentUpdated.BirthDate = student.BirthDate;
-            studentUpdated.SocialName = student.SocialName;
+            studentUpdated.User.Name = httpStudent.Name;
+            studentUpdated.User.Email = httpStudent.Email;
+            studentUpdated.User.Password = httpStudent.Password;
+            studentUpdated.User.SocialName = httpStudent.SocialName;
+            studentUpdated.User.IdProfile = httpStudent.IdProfile;
 
+            studentUpdated.IdAddress = httpStudent.IdAddress;
+            studentUpdated.IdGenre = httpStudent.IdGenre;
+            studentUpdated.BirthDate = httpStudent.BirthDate;
+
+            await _dbContext.Student.AddAsync(studentUpdated);
             await _dbContext.SaveChangesAsync();
-
             return studentUpdated;
         }
 
@@ -102,6 +119,28 @@ namespace SistemaCrossfit.Repositories
             await _dbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<Student> ConnectAddressWithStudent(int idStudent, int idAddress)
+        {
+            Student studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == idStudent);
+            if (studentUpdated == null)
+            {
+                throw new HttpRequestException("Student not found!", null, HttpStatusCode.NotFound);
+            }
+
+            Address address = await _dbContext.Address.FirstOrDefaultAsync(a => a.IdAddress == idAddress);
+            if (address == null)
+            {
+                throw new HttpRequestException("Address not found!", null, HttpStatusCode.NotFound);
+            }
+
+            studentUpdated.IdAddress = address.IdAddress;
+            studentUpdated.Address = address;
+
+            await _dbContext.SaveChangesAsync();
+
+            return studentUpdated;
         }
     }
 }

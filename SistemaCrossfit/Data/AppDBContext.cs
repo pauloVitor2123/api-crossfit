@@ -8,9 +8,13 @@ namespace SistemaCrossfit.Data
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 
-        public DbSet<Profile> Profile { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Admin> Admin { get; set; }
         public DbSet<Student> Student { get; set; }
+        public DbSet<Professor> Professor { get; set; }
+        public DbSet<Profile> Profile { get; set; }
         public DbSet<Genre> Genre { get; set; }
+        public DbSet<Address> Address { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

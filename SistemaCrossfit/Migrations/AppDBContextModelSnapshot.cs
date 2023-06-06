@@ -49,11 +49,13 @@ namespace SistemaCrossfit.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
 
                     b.Property<string>("Neighborhood")
                         .HasMaxLength(100)
@@ -77,7 +79,8 @@ namespace SistemaCrossfit.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("updated_at");
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
 
                     b.HasKey("IdAddress");
 
@@ -95,46 +98,27 @@ namespace SistemaCrossfit.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("email");
-
-                    b.Property<int>("IdProfile")
+                    b.Property<int>("IdUser")
                         .HasColumnType("int")
-                        .HasColumnName("id_profile");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("password");
-
-                    b.Property<string>("SocialName")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("social_name");
+                        .HasColumnName("id_user");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("updated_at");
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
 
                     b.HasKey("IdAdmin");
 
-                    b.HasIndex("IdProfile");
+                    b.HasIndex("IdUser")
+                        .IsUnique();
 
                     b.ToTable("Admin");
                 });
@@ -195,46 +179,27 @@ namespace SistemaCrossfit.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("email");
-
-                    b.Property<int>("IdProfile")
+                    b.Property<int>("IdUser")
                         .HasColumnType("int")
-                        .HasColumnName("id_profile");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("password");
-
-                    b.Property<string>("SocialName")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("social_name");
+                        .HasColumnName("id_user");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("updated_at");
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
 
                     b.HasKey("IdProfessor");
 
-                    b.HasIndex("IdProfile");
+                    b.HasIndex("IdUser")
+                        .IsUnique();
 
                     b.ToTable("Professor");
                 });
@@ -304,17 +269,13 @@ namespace SistemaCrossfit.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("email");
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
 
                     b.Property<int?>("IdAddress")
                         .HasColumnType("int")
@@ -324,9 +285,9 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id_genre");
 
-                    b.Property<int>("IdProfile")
+                    b.Property<int>("IdUser")
                         .HasColumnType("int")
-                        .HasColumnName("id_profile");
+                        .HasColumnName("id_user");
 
                     b.Property<bool?>("IsBlocked")
                         .ValueGeneratedOnAdd()
@@ -334,26 +295,10 @@ namespace SistemaCrossfit.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_blocked");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("password");
-
-                    b.Property<string>("SocialName")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("social_name");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("updated_at");
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
 
                     b.HasKey("IdStudent");
 
@@ -363,31 +308,83 @@ namespace SistemaCrossfit.Migrations
 
                     b.HasIndex("IdGenre");
 
-                    b.HasIndex("IdProfile");
+                    b.HasIndex("IdUser")
+                        .IsUnique();
 
                     b.ToTable("Student");
                 });
 
+            modelBuilder.Entity("SistemaCrossfit.Models.User", b =>
+                {
+                    b.Property<int>("IdUser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_user");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUser"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("email");
+
+                    b.Property<int>("IdProfile")
+                        .HasColumnType("int")
+                        .HasColumnName("id_profile");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("password");
+
+                    b.Property<string>("SocialName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("social_name");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("IdUser");
+
+                    b.HasIndex("IdProfile");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("SistemaCrossfit.Models.Admin", b =>
                 {
-                    b.HasOne("SistemaCrossfit.Models.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("IdProfile")
+                    b.HasOne("SistemaCrossfit.Models.User", "User")
+                        .WithOne("Admin")
+                        .HasForeignKey("SistemaCrossfit.Models.Admin", "IdUser")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Profile");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SistemaCrossfit.Models.Professor", b =>
                 {
-                    b.HasOne("SistemaCrossfit.Models.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("IdProfile")
+                    b.HasOne("SistemaCrossfit.Models.User", "User")
+                        .WithOne("Professor")
+                        .HasForeignKey("SistemaCrossfit.Models.Professor", "IdUser")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Profile");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SistemaCrossfit.Models.Student", b =>
@@ -397,14 +394,14 @@ namespace SistemaCrossfit.Migrations
                         .HasForeignKey("SistemaCrossfit.Models.Student", "IdAddress");
 
                     b.HasOne("SistemaCrossfit.Models.Genre", "Genre")
-                        .WithMany("Students")
+                        .WithMany()
                         .HasForeignKey("IdGenre")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaCrossfit.Models.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("IdProfile")
+                    b.HasOne("SistemaCrossfit.Models.User", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("SistemaCrossfit.Models.Student", "IdUser")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -412,12 +409,27 @@ namespace SistemaCrossfit.Migrations
 
                     b.Navigation("Genre");
 
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.User", b =>
+                {
+                    b.HasOne("SistemaCrossfit.Models.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("IdProfile")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("SistemaCrossfit.Models.Genre", b =>
+            modelBuilder.Entity("SistemaCrossfit.Models.User", b =>
                 {
-                    b.Navigation("Students");
+                    b.Navigation("Admin");
+
+                    b.Navigation("Professor");
+
+                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

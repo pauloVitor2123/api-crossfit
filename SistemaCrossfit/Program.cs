@@ -1,8 +1,12 @@
+using JWT.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SistemaCrossfit.Data;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
+using System.Text;
 
 namespace SistemaCrossfit
 {
@@ -14,7 +18,26 @@ namespace SistemaCrossfit
 
             // Add services to the container.
 
+            builder.Services.AddCors();
             builder.Services.AddControllers();
+            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -26,9 +49,10 @@ namespace SistemaCrossfit
                 );
 
 
+            builder.Services.AddScoped<IBaseRepository<Address>, AddressRepository>();
             builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
-            builder.Services.AddScoped<StudentRepository, StudentRepository>();
 
 
             var app = builder.Build();
@@ -42,6 +66,9 @@ namespace SistemaCrossfit
 
             app.UseHttpsRedirection();
 
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

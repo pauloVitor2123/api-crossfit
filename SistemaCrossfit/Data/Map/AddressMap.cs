@@ -36,6 +36,8 @@ namespace SistemaCrossfit.Data.Map
                 .WithOne(x => x.Address)
                 .HasForeignKey<Student>(x => x.IdAddress)
                 .IsRequired(false);
+
+            base.Configure(builder);
         }
     }
 }

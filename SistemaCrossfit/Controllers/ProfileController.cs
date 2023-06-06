@@ -44,7 +44,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Profile>> DeleteById(int id)
+        public async Task<ActionResult<Profile>> DeleteProfileById(int id)
         {
             Boolean deleted = await _profileRepository.Delete(id);
             return Ok(deleted);

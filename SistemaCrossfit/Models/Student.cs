@@ -1,29 +1,26 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SistemaCrossfit.Models
 {
-    public class Student : User
+    public class Student : BaseModel
     {
+        [Key]
         public int IdStudent { get; set; }
-        [Column("id_genre")]
+        public int? IdAddress { get; set; }
+        public int IdUser { get; set; }
         public int IdGenre { get; set; }
-        [SwaggerSchema]
+        public DateTime? BirthDate { get; set; }
+        public bool? IsBlocked { get; set; }
+        public string? BlockDescription { get; set; }
+
+        /*---------------------------------*/
         [JsonIgnore]
         public Genre? Genre { get; set; }
-
-        [Column("id_address")]
-        public int? IdAddress { get; set; }
-        [SwaggerSchema]
+        [JsonIgnore]
         public Address? Address { get; set; }
-
-        [SwaggerSchema]
-        public DateTime? BirthDate { get; set; }
-        [SwaggerSchema]
-        public bool? IsBlocked { get; set; }
-        [SwaggerSchema]
-        public string? BlockDescription { get; set; }
-        /*public FileAttributes ImageProfile { get; set; }*/
+        public User User { get; set; }
     }
 }
