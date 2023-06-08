@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
-using SistemaCrossfit.DTO.Student;
+using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
 using System.Net;
@@ -15,17 +15,20 @@ namespace SistemaCrossfit.Repositories
             _dbContext = appDbContext;
         }
 
-        public async Task<List<Student>> GetAll()
+        public async Task<List<CreateStudentBody>> GetAll()
         {
             UserRepository userRepository = new UserRepository(_dbContext);
-            List<Student> studentList = await _dbContext.Student.ToListAsync();
-            foreach (var student in studentList)
+            List<Student> students = await _dbContext.Student.ToListAsync();
+            List<CreateStudentBody> studentsList = new List<CreateStudentBody>();
+            foreach (var student in students)
             {
-                student.User = await userRepository.GetById(student.IdUser);
+                User user = await userRepository.GetById(student.IdUser);
+                CreateStudentBody studentBody = new CreateStudentBody(user, student);
+                studentsList.Add(studentBody);
             }
 
 
-            return studentList;
+            return studentsList;
         }
 
         public async Task<Student> GetById(int id)
@@ -36,43 +39,19 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
-            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == student.IdUser);
-            if (user == null)
-            {
-                throw new Exception("User not found!");
-            }
-
-            student.User = user;
             return student;
         }
 
-        public async Task<Student> Create(CreateStudent httpStudent)
+        public async Task<Student> Create(Student student)
         {
-
-            User user = new User();
-            user.Name = httpStudent.Name;
-            user.Email = httpStudent.Email;
-            user.Password = httpStudent.Password;
-            user.SocialName = httpStudent.SocialName;
-
-            UserRepository userRepository = new UserRepository(_dbContext);
-            User userInserted = await userRepository.Create(user, "STUDENT");
-
-            Student student = new Student();
-            student.IdAddress = httpStudent.IdAddress;
-            student.IdGenre = httpStudent.IdGenre;
-            student.BirthDate = httpStudent.BirthDate;
-            student.IdUser = userInserted.IdUser;
-            student.User = userInserted;
 
             await _dbContext.Student.AddAsync(student);
             await _dbContext.SaveChangesAsync();
 
-
             return student;
         }
 
-        public async Task<Student> Update(CreateStudent httpStudent, int id)
+        public async Task<Student> Update(Student student, int id)
         {
             Student studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
             if (studentUpdated == null)
@@ -80,28 +59,15 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
-            User userUpdated = await _dbContext.User.FirstOrDefaultAsync(s => s.IdUser == studentUpdated.IdUser);
-            if (userUpdated == null)
-            {
-                throw new Exception("User not found!");
-            }
-
-
-            userUpdated.Name = httpStudent.Name;
-            userUpdated.Email = httpStudent.Email;
-            userUpdated.Password = httpStudent.Password;
-            userUpdated.SocialName = httpStudent.SocialName;
-
-
-            studentUpdated.IdAddress = httpStudent.IdAddress;
-            studentUpdated.IdGenre = httpStudent.IdGenre;
-            studentUpdated.BirthDate = httpStudent.BirthDate;
+            studentUpdated.IdAddress = student.IdAddress;
+            studentUpdated.IdGenre = student.IdGenre;
+            studentUpdated.BirthDate = student.BirthDate;
 
             await _dbContext.SaveChangesAsync();
             return studentUpdated;
         }
 
-        public async Task<Boolean> Delete(int id)
+        public async Task<int> DeleteReturningIdUser(int id)
         {
             Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdStudent == id);
             if (student == null)
@@ -109,14 +75,12 @@ namespace SistemaCrossfit.Repositories
                 throw new Exception("Student not found!");
             }
 
-
-            UserRepository userRepository = new UserRepository(_dbContext);
-            await userRepository.Delete(student.IdUser);
+            int IdUser = student.IdUser;
 
             _dbContext.Student.Remove(student);
             await _dbContext.SaveChangesAsync();
 
-            return true;
+            return IdUser;
         }
 
         public async Task<bool> Block(int id, string? description = "")

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SistemaCrossfit.DTO.Student;
+using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
@@ -12,15 +12,19 @@ namespace SistemaCrossfit.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IStudentRepository _studentRepository;
-        public StudentController(IStudentRepository studentRepository)
+        private readonly IProfileRepository _profileRepository;
+        private readonly IUserRepository _userRepository;
+        public StudentController(IStudentRepository studentRepository, IProfileRepository profileRepository, IUserRepository userRepository)
         {
             this._studentRepository = studentRepository;
+            _profileRepository = profileRepository;
+            _userRepository = userRepository;
         }
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<Student>>> GetStudents()
+        public async Task<ActionResult<List<CreateStudentBody>>> GetStudents()
         {
-            List<Student> students = await _studentRepository.GetAll();
+            List<CreateStudentBody> students = await _studentRepository.GetAll();
             return Ok(students);
         }
 
@@ -29,30 +33,67 @@ namespace SistemaCrossfit.Controllers
         public async Task<ActionResult<Student>> GetStudentById(int id)
         {
             Student student = await _studentRepository.GetById(id);
-            return Ok(student);
+            User user = await _userRepository.GetById(student.IdUser);
+            CreateStudentBody body = new CreateStudentBody(user, student);
+
+            return Ok(body);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<Student>> CreateStudent([FromBody] CreateStudent student)
+        public async Task<ActionResult<Student>> CreateStudent([FromBody] CreateStudentBody studentBody)
         {
-            Student s = await _studentRepository.Create(student);
-            return Ok(s);
+            User user = new User();
+            user.Email = studentBody.Email;
+            user.Password = studentBody.Password;
+            user.Name = studentBody.Name;
+            user.SocialName = studentBody.SocialName;
+
+            Profile profile = await _profileRepository.GetByNormalizedName("STUDENT");
+            user.IdProfile = profile.IdProfile;
+            User userCreated = await _userRepository.Create(user);
+
+            Student student = new Student();
+            student.IdUser = userCreated.IdUser;
+            await _studentRepository.Create(student);
+
+            studentBody.IdStudent = student.IdStudent;
+            studentBody.IdAddress = student.IdAddress;
+            studentBody.IdGenre = student.IdGenre;
+            studentBody.BirthDate = student.BirthDate;
+            studentBody.IsBlocked = student.IsBlocked;
+            studentBody.BlockDescription = student.BlockDescription;
+            studentBody.CreatedAt = student.CreatedAt;
+            studentBody.UpdatedAt = student.UpdatedAt;
+            studentBody.DeletedAt = student.DeletedAt;
+
+            return Ok(studentBody);
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<Student>> UpdatedStudent(int id, [FromBody] CreateStudent student)
+        public async Task<ActionResult<CreateStudentBody>> UpdatedStudent(int id, [FromBody] CreateStudentBody studentBody)
         {
-            Student s = await _studentRepository.Update(student, id);
-            return Ok(s);
+            User user = new User();
+            user.Email = studentBody.Email;
+            user.Password = studentBody.Password;
+            user.Name = studentBody.Name;
+            user.SocialName = studentBody.SocialName;
+
+            Student student = await _studentRepository.GetById(id);
+            await _userRepository.Update(user, student.IdUser);
+
+            await _studentRepository.Update(student, id);
+
+            return Ok(studentBody);
         }
 
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult<Student>> DeleteStudentById(int id)
         {
-            Boolean deleted = await _studentRepository.Delete(id);
+            int idUser = await _studentRepository.DeleteReturningIdUser(id);
+            Boolean deleted = await _userRepository.Delete(idUser);
             return Ok(deleted);
         }
 

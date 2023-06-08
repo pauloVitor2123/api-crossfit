@@ -1,12 +1,13 @@
-﻿using SistemaCrossfit.DTO.User;
+﻿using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
 
 namespace SistemaCrossfit.Repositories.Interface
 {
     public interface IUserRepository
     {
-        Task<dynamic> Login(LoginInput login);
-        Task<User> Create(User user, string normalizedNameProfile);
+        Task<dynamic> Login(LoginBody login);
+        Task<User> Create(User user);
+        Task<User> Update(User user, int id);
         Task<User> GetById(int id);
         Task<Boolean> Delete(int id);
     }

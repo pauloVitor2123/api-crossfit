@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,9 +24,13 @@ namespace SistemaCrossfit.Models
         public string? SocialName { get; set; }
 
         /*---------------------------------*/
+        [JsonIgnore]
         public Admin? Admin { get; set; }
+        [JsonIgnore]
         public Student? Student { get; set; }
+        [JsonIgnore]
         public Professor? Professor { get; set; }
+        [JsonIgnore]
         public Profile Profile { get; set; }
     }
 }

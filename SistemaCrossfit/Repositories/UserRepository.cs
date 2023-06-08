@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
-using SistemaCrossfit.DTO.User;
+using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
 using SistemaCrossfit.Services;
@@ -15,17 +15,28 @@ namespace SistemaCrossfit.Repositories
             _dbContext = appDbContext;
         }
 
-        public async Task<User> Create(User user, string normalizedNameProfile)
+        public async Task<User> Create(User user)
         {
-            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(s => s.NormalizedName == normalizedNameProfile);
-            if (profile == null)
+            await _dbContext.User.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            return user;
+        }
+
+        public async Task<User> Update(User user, int id)
+        {
+            User userUpdated = await _dbContext.User.FirstOrDefaultAsync(u => u.IdUser == id);
+
+            if (userUpdated == null)
             {
-                throw new Exception("Profile not found!");
+                throw new Exception("User not found!");
             }
 
-            user.IdProfile = profile.IdProfile;
+            userUpdated.Email = user.Email;
+            userUpdated.Password = user.Password;
+            userUpdated.Name = user.Name;
+            userUpdated.SocialName = user.SocialName;
 
-            await _dbContext.User.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             return user;
@@ -55,7 +66,7 @@ namespace SistemaCrossfit.Repositories
             return user;
         }
 
-        public async Task<dynamic> Login(LoginInput login)
+        public async Task<dynamic> Login(LoginBody login)
         {
             User user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == login.Email && u.Password == login.Password);
             if (user == null)

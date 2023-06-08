@@ -46,6 +46,19 @@ namespace SistemaCrossfit.Data
                     Console.WriteLine("Students seeds created successfully!");
                 }
 
+                if (!context.Admin.Any())
+                {
+                    var admins = AdminFactory.CreateSeedAdmins();
+                    await context.AddRangeAsync(admins.ToArray());
+                    Console.WriteLine("Admins seeds created successfully!");
+                }
+                if (!context.Professor.Any())
+                {
+                    var professors = ProfessorFactory.CreateSeedProfessors();
+                    await context.AddRangeAsync(professors.ToArray());
+                    Console.WriteLine("Professors seeds created successfully!");
+                }
+
 
                 await context.SaveChangesAsync();
                 Console.WriteLine("Seeds created successfully!");

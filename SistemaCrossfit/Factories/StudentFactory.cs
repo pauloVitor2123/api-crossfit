@@ -6,7 +6,7 @@ namespace SistemaCrossfit.Factories
     {
         public static List<Student> CreateSeedStudents()
         {
-            List<Student> profiles = new List<Student>();
+            List<Student> students = new List<Student>();
 
             Student student = new()
             {
@@ -14,10 +14,10 @@ namespace SistemaCrossfit.Factories
                 IdGenre = 1,
                 BirthDate = DateTime.Now
             };
-            profiles.Add(student);
+            students.Add(student);
 
 
-            return profiles;
+            return students;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SistemaCrossfit.DTO.User;
+using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
@@ -21,7 +21,7 @@ namespace SistemaCrossfit.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody] LoginInput login)
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] LoginBody login)
         {
             var response = await _userRepository.Login(login);
             return response;
