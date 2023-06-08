@@ -9,15 +9,6 @@ namespace SistemaCrossfit.Models
         [Key]
         [Column("id_user")]
         public int IdUser { get; set; }
-        /*[ForeignKey("id_admin")]
-        [Column("id_admin")]
-        public int? IdAdmin { get; set; }
-        [ForeignKey("id_student")]
-        [Column("id_student")]
-        public int? IdStudent { get; set; }
-        [ForeignKey("id_professor")]
-        [Column("id_professor")]
-        public int? IdProfessor { get; set; }*/
 
         [ForeignKey("id_profile")]
         [Column("id_profile")]

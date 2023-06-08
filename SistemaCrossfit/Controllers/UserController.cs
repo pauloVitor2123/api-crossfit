@@ -26,5 +26,17 @@ namespace SistemaCrossfit.Controllers
             var response = await _userRepository.Login(login);
             return response;
         }
+
+        [HttpPost]
+        [Route("validate-token")]
+        [Authorize]
+        public OkObjectResult ValidateToken(string token)
+        {
+            if (token == null)
+            {
+                throw new ArgumentNullException("Invalid token");
+            }
+            return Ok(token);
+        }
     }
 }

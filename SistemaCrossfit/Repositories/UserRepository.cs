@@ -57,7 +57,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<dynamic> Login(LoginInput login)
         {
-            User user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == login.Email);
+            User user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == login.Email && u.Password == login.Password);
             if (user == null)
             {
                 throw new Exception("Email or password not found!");

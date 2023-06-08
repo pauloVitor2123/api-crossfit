@@ -19,7 +19,7 @@ namespace SistemaCrossfit.Factories
             users.Add(admin);
             User student = new()
             {
-                IdProfile = 1,
+                IdProfile = 2,
                 Name = "Estudante Vitor",
                 SocialName = "Student",
                 Email = "student@student.com",
@@ -29,7 +29,7 @@ namespace SistemaCrossfit.Factories
 
             User professor = new()
             {
-                IdProfile = 1,
+                IdProfile = 3,
                 Name = "Professor Girafales",
                 SocialName = "Professor",
                 Email = "professor@professor.com",
