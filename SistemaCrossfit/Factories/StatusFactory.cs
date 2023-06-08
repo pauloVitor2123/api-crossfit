@@ -8,13 +8,29 @@ namespace SistemaCrossfit.Factories
         {
             List<Status> status = new List<Status>();
 
-            Status active = new Status()
+            Status notStarted = new Status()
             {
-                Name = "Active",
-                NormalizedName = "ACTIVE",
+                Name = "Not Started",
+                NormalizedName = "NOT_STARTED",
                 Active = true
             };
-            status.Add(active);
+            status.Add(notStarted);
+
+            Status inProgress = new Status()
+            {
+                Name = "In Progress",
+                NormalizedName = "IN_PROGRESS",
+                Active = true
+            };
+            status.Add(inProgress);
+
+            Status finalized = new Status()
+            {
+                Name = "Finalized",
+                NormalizedName = "FINALIZED",
+                Active = true
+            };
+            status.Add(finalized);
 
             Status pendent = new Status()
             {
@@ -24,13 +40,14 @@ namespace SistemaCrossfit.Factories
             };
             status.Add(pendent);
 
-            Status blocked = new Status()
+            Status paymentDone = new Status()
             {
-                Name = "Blocked",
-                NormalizedName = "BLOCKED",
+                Name = "Payment Done",
+                NormalizedName = "PAYMENT_DONE",
                 Active = true
             };
-            status.Add(blocked);
+            status.Add(pendent);
+
 
             return status;
         }
