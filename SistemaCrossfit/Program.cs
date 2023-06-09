@@ -59,6 +59,7 @@ namespace SistemaCrossfit
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+            builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 
 
 

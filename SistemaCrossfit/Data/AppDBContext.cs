@@ -15,6 +15,7 @@ namespace SistemaCrossfit.Data
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Genre> Genre { get; set; }
         public DbSet<Address> Address { get; set; }
+        public DbSet<Status> Status { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +26,7 @@ namespace SistemaCrossfit.Data
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());
             modelBuilder.ApplyConfiguration(new StudentMap());
+            modelBuilder.ApplyConfiguration(new StatusMap());
             base.OnModelCreating(modelBuilder);
         }
 
