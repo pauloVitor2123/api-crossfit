@@ -64,6 +64,12 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(exercises.ToArray());
                     Console.WriteLine("Exercises seeds created successfully!");
                 }
+                if (!context.PaymentType.Any())
+                {
+                    var paymentTypes = PaymentTypeFactory.CreateSeedPaymentType();
+                    await context.AddRangeAsync(paymentTypes.ToArray());
+                    Console.WriteLine("PaymentTypes seeds created successfully!");
+                }
 
                 await context.SaveChangesAsync();
                 Console.WriteLine("Seeds created successfully!");
