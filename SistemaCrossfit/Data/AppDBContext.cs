@@ -20,6 +20,7 @@ namespace SistemaCrossfit.Data
         public DbSet<PaymentType> PaymentType { get; set; }
         public DbSet<Telephone> Telephone { get; set; }
         public DbSet<Class> Class { get; set; }
+        public DbSet<ContentManagement> ContentManagement { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

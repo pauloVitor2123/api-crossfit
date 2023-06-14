@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaCrossfit.Data;
 
@@ -11,9 +12,10 @@ using SistemaCrossfit.Data;
 namespace SistemaCrossfit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230613235737_ContentManagement")]
+    partial class ContentManagement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,62 +125,6 @@ namespace SistemaCrossfit.Migrations
                     b.ToTable("Admin");
                 });
 
-            modelBuilder.Entity("SistemaCrossfit.Models.Class", b =>
-                {
-                    b.Property<int>("IdClass")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id_class");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdClass"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at")
-                        .HasColumnOrder(2147483646);
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at")
-                        .HasColumnOrder(2147483647);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<TimeSpan>("EndHour")
-                        .HasColumnType("time")
-                        .HasColumnName("end_hour");
-
-                    b.Property<int>("IdProfessor")
-                        .HasColumnType("int")
-                        .HasColumnName("id_professor");
-
-                    b.Property<int>("IdStatus")
-                        .HasColumnType("int")
-                        .HasColumnName("id_status");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasColumnName("name");
-
-                    b.Property<TimeSpan>("StartHour")
-                        .HasColumnType("time")
-                        .HasColumnName("start_hour");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("updated_at")
-                        .HasColumnOrder(2147483645);
-
-                    b.HasKey("IdClass");
-
-                    b.HasIndex("IdProfessor");
-
-                    b.ToTable("Class");
             modelBuilder.Entity("SistemaCrossfit.Models.ContentManagement", b =>
                 {
                     b.Property<int>("IdContentManagement")
@@ -559,44 +505,6 @@ namespace SistemaCrossfit.Migrations
                     b.ToTable("Student");
                 });
 
-            modelBuilder.Entity("SistemaCrossfit.Models.Telephone", b =>
-                {
-                    b.Property<int>("IdTelephone")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id_telephone");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTelephone"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at")
-                        .HasColumnOrder(2147483646);
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at")
-                        .HasColumnOrder(2147483647);
-
-                    b.Property<int>("IdStudent")
-                        .HasMaxLength(255)
-                        .HasColumnType("int")
-                        .HasColumnName("id_student");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int")
-                        .HasColumnName("number");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("updated_at")
-                        .HasColumnOrder(2147483645);
-
-                    b.HasKey("IdTelephone");
-
-                    b.ToTable("Telephone");
-                });
-
             modelBuilder.Entity("SistemaCrossfit.Models.User", b =>
                 {
                     b.Property<int>("IdUser")
@@ -666,15 +574,6 @@ namespace SistemaCrossfit.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SistemaCrossfit.Models.Class", b =>
-                {
-                    b.HasOne("SistemaCrossfit.Models.Professor", "Professor")
-                        .WithMany()
-                        .HasForeignKey("IdProfessor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Professor");
             modelBuilder.Entity("SistemaCrossfit.Models.ContentManagement", b =>
                 {
                     b.HasOne("SistemaCrossfit.Models.Address", "Address")
