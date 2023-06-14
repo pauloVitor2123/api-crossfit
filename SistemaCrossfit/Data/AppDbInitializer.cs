@@ -58,6 +58,7 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(professors.ToArray());
                     Console.WriteLine("Professors seeds created successfully!");
                 }
+                await context.SaveChangesAsync();
                 if (!context.Exercise.Any())
                 {
                     var exercises = ExerciseFactory.CreateSeedExercises();
@@ -76,6 +77,8 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(status.ToArray());
                     Console.WriteLine("Status seeds created successfully!");
                 }
+                await context.SaveChangesAsync();
+
                 if (!context.Telephone.Any())
                 {
                     var telephones = TelephoneFactory.CreateSeedTelephones();
