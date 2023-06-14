@@ -20,7 +20,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<Status> GetById(int id)
         {
-            Status status = await _dbContext.Status.FirstOrDefaultAsync(status => status.IdStatus == id);
+            Status? status = await _dbContext.Status.FirstOrDefaultAsync(status => status.IdStatus == id);
             if (status == null)
             {
                 throw new Exception("Status not found!");
@@ -38,7 +38,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<Status> Update(Status status, int id)
         {
-            Status statusUpdated = await _dbContext.Status.FirstOrDefaultAsync(s => s.IdStatus == id);
+            Status? statusUpdated = await _dbContext.Status.FirstOrDefaultAsync(s => s.IdStatus == id);
             if (statusUpdated == null)
             {
                 throw new Exception("Status not found!");
@@ -55,7 +55,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<Boolean> Delete(int id)
         {
-            Status status = await _dbContext.Status.FirstOrDefaultAsync(status => status.IdStatus == id);
+            Status? status = await _dbContext.Status.FirstOrDefaultAsync(status => status.IdStatus == id);
             if (status == null)
             {
                 throw new Exception("Status not found!");
@@ -69,7 +69,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<Status> GetByNormalizedName(string normalizedName)
         {
-            Status status = await _dbContext.Status.FirstOrDefaultAsync(status => status.NormalizedName == normalizedName);
+            Status? status = await _dbContext.Status.FirstOrDefaultAsync(status => status.NormalizedName == normalizedName);
             if (status == null)
             {
                 throw new Exception("Status not found!");

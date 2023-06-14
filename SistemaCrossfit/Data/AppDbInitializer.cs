@@ -70,6 +70,18 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(paymentTypes.ToArray());
                     Console.WriteLine("PaymentTypes seeds created successfully!");
                 }
+                if (!context.Status.Any())
+                {
+                    var status = StatusFactory.CreateSeedStatus();
+                    await context.AddRangeAsync(status.ToArray());
+                    Console.WriteLine("Status seeds created successfully!");
+                }
+                if (!context.Telephone.Any())
+                {
+                    var telephones = TelephoneFactory.CreateSeedTelephones();
+                    await context.AddRangeAsync(telephones.ToArray());
+                    Console.WriteLine("Telephones seeds created successfully!");
+                }
 
                 await context.SaveChangesAsync();
                 Console.WriteLine("Seeds created successfully!");

@@ -18,6 +18,7 @@ namespace SistemaCrossfit.Data
         public DbSet<Status> Status { get; set; }
         public DbSet<Exercise> Exercise { get; set; }
         public DbSet<PaymentType> PaymentType { get; set; }
+        public DbSet<Telephone> Telephone { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,7 @@ namespace SistemaCrossfit.Data
             modelBuilder.ApplyConfiguration(new StatusMap());
             modelBuilder.ApplyConfiguration(new ExerciseMap());
             modelBuilder.ApplyConfiguration(new PaymentTypeMap());
+            modelBuilder.ApplyConfiguration(new TelephoneMap());
             base.OnModelCreating(modelBuilder);
         }
 
