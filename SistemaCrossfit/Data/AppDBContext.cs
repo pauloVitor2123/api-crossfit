@@ -18,6 +18,7 @@ namespace SistemaCrossfit.Data
         public DbSet<Status> Status { get; set; }
         public DbSet<Exercise> Exercise { get; set; }
         public DbSet<PaymentType> PaymentType { get; set; }
+        public DbSet<ContentManagement> ContentManagement { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

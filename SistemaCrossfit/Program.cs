@@ -62,6 +62,7 @@ namespace SistemaCrossfit
             builder.Services.AddScoped<IStatusRepository, StatusRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+            builder.Services.AddScoped<IContentManagementRepository, ContentManagementRepository>();
 
             var app = builder.Build();
 
