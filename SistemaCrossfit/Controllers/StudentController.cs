@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
-using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Controllers
@@ -14,17 +13,19 @@ namespace SistemaCrossfit.Controllers
         private readonly IStudentRepository _studentRepository;
         private readonly IProfileRepository _profileRepository;
         private readonly IUserRepository _userRepository;
+
         public StudentController(IStudentRepository studentRepository, IProfileRepository profileRepository, IUserRepository userRepository)
         {
             this._studentRepository = studentRepository;
             _profileRepository = profileRepository;
             _userRepository = userRepository;
         }
+
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<List<CreateStudentBody>>> GetStudents()
         {
-            List<CreateStudentBody> students = await _studentRepository.GetAll();
+            var students = await _studentRepository.GetAll();
             return Ok(students);
         }
 
@@ -32,9 +33,9 @@ namespace SistemaCrossfit.Controllers
         [Authorize]
         public async Task<ActionResult<Student>> GetStudentById(int id)
         {
-            Student student = await _studentRepository.GetById(id);
-            User user = await _userRepository.GetById(student.IdUser);
-            CreateStudentBody body = new CreateStudentBody(user, student);
+            var student = await _studentRepository.GetById(id);
+            var user = await _userRepository.GetById(student.IdUser);
+            var body = new CreateStudentBody(user, student);
 
             return Ok(body);
         }
@@ -43,17 +44,17 @@ namespace SistemaCrossfit.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Student>> CreateStudent([FromBody] CreateStudentBody studentBody)
         {
-            User user = new User();
+            var user = new User();
             user.Email = studentBody.Email;
             user.Password = studentBody.Password;
             user.Name = studentBody.Name;
             user.SocialName = studentBody.SocialName;
 
-            Profile profile = await _profileRepository.GetByNormalizedName("STUDENT");
+            var profile = await _profileRepository.GetByNormalizedName("STUDENT");
             user.IdProfile = profile.IdProfile;
-            User userCreated = await _userRepository.Create(user);
+            var userCreated = await _userRepository.Create(user);
 
-            Student student = new Student();
+            var student = new Student();
             student.IdUser = userCreated.IdUser;
             await _studentRepository.Create(student);
 
@@ -74,13 +75,13 @@ namespace SistemaCrossfit.Controllers
         [Authorize]
         public async Task<ActionResult<CreateStudentBody>> UpdatedStudent(int id, [FromBody] CreateStudentBody studentBody)
         {
-            User user = new User();
+            var user = new User();
             user.Email = studentBody.Email;
             user.Password = studentBody.Password;
             user.Name = studentBody.Name;
             user.SocialName = studentBody.SocialName;
 
-            Student student = await _studentRepository.GetById(id);
+            var student = await _studentRepository.GetById(id);
             await _userRepository.Update(user, student.IdUser);
 
             await _studentRepository.Update(student, id);
@@ -93,7 +94,7 @@ namespace SistemaCrossfit.Controllers
         public async Task<ActionResult<Student>> DeleteStudentById(int id)
         {
             int idUser = await _studentRepository.DeleteReturningIdUser(id);
-            Boolean deleted = await _userRepository.Delete(idUser);
+            bool deleted = await _userRepository.Delete(idUser);
             return Ok(deleted);
         }
 
@@ -107,7 +108,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize]
         public async Task<ActionResult<Student>> BlockStudentById(int id, [FromBody] BlockRequest blockRequest)
         {
-            Boolean blocked = await _studentRepository.Block(id, blockRequest.BlockDescription);
+            bool blocked = await _studentRepository.Block(id, blockRequest.BlockDescription);
             return Ok(blocked);
         }
 
@@ -115,7 +116,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Student>> UnblockStudentById(int id)
         {
-            Boolean unblocked = await _studentRepository.Unblock(id);
+            bool unblocked = await _studentRepository.Unblock(id);
             return Ok(unblocked);
         }
 

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.DTO;
-using SistemaCrossfit.Models;
-using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Controllers
@@ -12,11 +10,11 @@ namespace SistemaCrossfit.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+
         public UserController(IUserRepository userRepository)
         {
             this._userRepository = userRepository;
         }
-
 
         [HttpPost]
         [Route("login")]

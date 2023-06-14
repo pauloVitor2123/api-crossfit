@@ -14,7 +14,6 @@ namespace SistemaCrossfit.Factories
             };
             professors.Add(professor);
 
-
             return professors;
         }
     }

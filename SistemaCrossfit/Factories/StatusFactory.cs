@@ -4,7 +4,7 @@ namespace SistemaCrossfit.Factories
 {
     public class StatusFactory
     {
-        public static List<Status> CreateSeedStatus()
+        public static List<Status> CreateSeedStatuses()
         {
             List<Status> status = new List<Status>();
 

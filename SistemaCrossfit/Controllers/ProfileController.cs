@@ -12,8 +12,9 @@ namespace SistemaCrossfit.Controllers
         private readonly IProfileRepository _profileRepository;
         public ProfileController(IProfileRepository profileRepository)
         {
-            this._profileRepository = profileRepository;
+            _profileRepository = profileRepository;
         }
+
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<List<Profile>>> GetProfiles()
@@ -50,7 +51,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Profile>> DeleteProfileById(int id)
         {
-            Boolean deleted = await _profileRepository.Delete(id);
+            bool deleted = await _profileRepository.Delete(id);
             return Ok(deleted);
         }
     }
