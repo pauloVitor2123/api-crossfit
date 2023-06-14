@@ -179,6 +179,7 @@ namespace SistemaCrossfit.Migrations
                     b.HasIndex("IdProfessor");
 
                     b.ToTable("Class");
+                });
             modelBuilder.Entity("SistemaCrossfit.Models.ContentManagement", b =>
                 {
                     b.Property<int>("IdContentManagement")
@@ -675,6 +676,7 @@ namespace SistemaCrossfit.Migrations
                         .IsRequired();
 
                     b.Navigation("Professor");
+                });
             modelBuilder.Entity("SistemaCrossfit.Models.ContentManagement", b =>
                 {
                     b.HasOne("SistemaCrossfit.Models.Address", "Address")
