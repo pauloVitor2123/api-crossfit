@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # Hide appsettings.json
 appsettings.json
+
+# Hide VS Code files
+.vscode/*
