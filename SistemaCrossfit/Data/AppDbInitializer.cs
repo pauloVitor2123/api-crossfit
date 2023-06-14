@@ -82,10 +82,14 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(telephones.ToArray());
                     Console.WriteLine("Telephones seeds created successfully!");
                 }
-
+                if (!context.Class.Any())
+                {
+                    var classes = ClassFactory.CreateSeedClasses();
+                    await context.AddRangeAsync(classes.ToArray());
+                    Console.WriteLine("Classes seeds created successfully!");
+                }
                 await context.SaveChangesAsync();
                 Console.WriteLine("Seeds created successfully!");
-
             }
         }
     }

@@ -1,4 +1,3 @@
-using JWT.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -55,6 +54,7 @@ namespace SistemaCrossfit
 
             builder.Services.AddScoped<IBaseRepository<Address>, AddressRepository>();
             builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
+            builder.Services.AddScoped<IBaseRepository<Telephone>, TelephoneRepository>();
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
@@ -62,7 +62,8 @@ namespace SistemaCrossfit
             builder.Services.AddScoped<IStatusRepository, StatusRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
-            builder.Services.AddScoped<IBaseRepository<Telephone>, TelephoneRepository>();
+            builder.Services.AddScoped<IClassRespository, ClassRepository>();
+
 
             var app = builder.Build();
 
