@@ -20,40 +20,75 @@ namespace SistemaCrossfit.Controllers
 		[Authorize]
 		public async Task<ActionResult<List<PaymentType>>> GetPaymentTypes()
 		{
-			List<PaymentType> paymentTypes = await _paymentTypeRepository.GetAll();
-			return Ok(paymentTypes);
+			try
+			{
+				List<PaymentType> paymentTypes = await _paymentTypeRepository.GetAll();
+				return Ok(paymentTypes);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpGet("{id}")]
 		[Authorize]
 		public async Task<ActionResult<PaymentType>> GetPaymentTypeById(int id)
 		{
-			PaymentType paymentType = await _paymentTypeRepository.GetById(id);
-			return Ok(paymentType);
+			try
+			{
+				PaymentType paymentType = await _paymentTypeRepository.GetById(id);
+				return Ok(paymentType);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpPost]
 		[Authorize(Roles = "ADMIN")]
 		public async Task<ActionResult<PaymentType>> CreatePaymentType([FromBody] PaymentType paymentType)
 		{
-			PaymentType p = await _paymentTypeRepository.Create(paymentType);
-			return Ok(p);
+			try
+			{
+				PaymentType p = await _paymentTypeRepository.Create(paymentType);
+				return Ok(p);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpPut]
 		[Authorize(Roles = "ADMIN")]
 		public async Task<ActionResult<PaymentType>> UpdatePaymentType(int id, [FromBody] PaymentType paymentType)
 		{
-			PaymentType p = await _paymentTypeRepository.Update(paymentType, id);
-			return Ok(p);
+			try
+			{
+				PaymentType p = await _paymentTypeRepository.Update(paymentType, id);
+				return Ok(p);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "ADMIN")]
 		public async Task<ActionResult<PaymentType>> DeletePaymentTypeById(int id)
 		{
-			Boolean deleted = await _paymentTypeRepository.Delete(id);
-			return Ok(deleted);
+			try
+			{
+				Boolean deleted = await _paymentTypeRepository.Delete(id);
+				return Ok(deleted);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 	}
 }

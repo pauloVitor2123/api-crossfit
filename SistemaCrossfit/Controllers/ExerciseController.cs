@@ -20,40 +20,75 @@ namespace SistemaCrossfit.Controllers
 		[Authorize]
 		public async Task<ActionResult<List<Exercise>>> GetExercises()
 		{
-			List<Exercise> exercises = await _exerciseRepository.GetAll();
-			return Ok(exercises);
+			try
+			{
+				List<Exercise> exercises = await _exerciseRepository.GetAll();
+				return Ok(exercises);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpGet("{id}")]
 		[Authorize]
 		public async Task<ActionResult<Exercise>> GetExerciseById(int id)
 		{
-			Exercise exercise = await _exerciseRepository.GetById(id);
-			return Ok(exercise);
+			try
+			{
+				Exercise exercise = await _exerciseRepository.GetById(id);
+				return Ok(exercise);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpPost]
 		[Authorize(Roles = "ADMIN")]
 		public async Task<ActionResult<Exercise>> CreateExercise([FromBody] Exercise exercise)
 		{
-			Exercise e = await _exerciseRepository.Create(exercise);
-			return Ok(e);
+			try
+			{
+				Exercise e = await _exerciseRepository.Create(exercise);
+				return Ok(e);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpPut("{id}")]
 		[Authorize(Roles = "ADMIN")]
 		public async Task<ActionResult<Exercise>> UpdateExercise(int id, [FromBody] Exercise exercise)
 		{
-			Exercise e = await _exerciseRepository.Update(exercise, id);
-			return Ok(e);
+			try
+			{
+				Exercise e = await _exerciseRepository.Update(exercise, id);
+				return Ok(e);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "ADMIN")]
 		public async Task<ActionResult<Exercise>> DeleteExerciseById(int id)
 		{
-			Boolean deleted = await _exerciseRepository.Delete(id);
-			return Ok(deleted);
+			try
+			{
+				Boolean deleted = await _exerciseRepository.Delete(id);
+				return Ok(deleted);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 		}
 	}
 }

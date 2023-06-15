@@ -65,7 +65,8 @@ namespace SistemaCrossfit.Repositories
 
 		public async Task<StudentPoints> Update(StudentPointsRequest requestBody, int idStudent, int idExercise)
 		{
-			try {
+			try
+			{
 				StudentPoints? studentPointsUpdated = await _dbContext.StudentPoints.FirstOrDefaultAsync(s => s.IdStudent == idStudent && s.IdExercise == idExercise);
 				if (studentPointsUpdated == null)
 				{

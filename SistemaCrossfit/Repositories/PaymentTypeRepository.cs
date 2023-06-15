@@ -20,7 +20,7 @@ namespace SistemaCrossfit.Repositories
 
 		public async Task<PaymentType> GetById(int id)
 		{
-			PaymentType paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.IdPaymentType == id);
+			PaymentType? paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.IdPaymentType == id);
 			if (paymentType == null)
 			{
 				throw new Exception("PaymentType not found!");
@@ -31,43 +31,85 @@ namespace SistemaCrossfit.Repositories
 
 		public async Task<PaymentType> Create(PaymentType paymentType)
 		{
-			await _dbContext.PaymentType.AddAsync(paymentType);
-			await _dbContext.SaveChangesAsync();
-			return paymentType;
+			try
+			{
+				await _dbContext.PaymentType.AddAsync(paymentType);
+				await _dbContext.SaveChangesAsync();
+				return paymentType;
+			}
+			catch (Exception ex)
+			{
+				string msg = ex.Message;
+
+				if (ex is DbUpdateException)
+				{
+					msg = ex.GetBaseException().Message;
+				}
+
+				throw new Exception(msg);
+			}
 		}
 
 		public async Task<PaymentType> Update(PaymentType paymentType, int id)
 		{
-			PaymentType paymentTypeUpdated = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.IdPaymentType == id);
-			if (paymentTypeUpdated == null)
+			try
 			{
-				throw new Exception("PaymentType not found!");
+				PaymentType? paymentTypeUpdated = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.IdPaymentType == id);
+				if (paymentTypeUpdated == null)
+				{
+					throw new Exception("PaymentType not found!");
+				}
+
+				paymentTypeUpdated.Name = paymentType.Name;
+
+				await _dbContext.SaveChangesAsync();
+
+				return paymentTypeUpdated;
 			}
+			catch (Exception ex)
+			{
+				string msg = ex.Message;
 
-			paymentTypeUpdated.Name = paymentType.Name;
+				if (ex is DbUpdateException)
+				{
+					msg = ex.GetBaseException().Message;
+				}
 
-			await _dbContext.SaveChangesAsync();
-
-			return paymentTypeUpdated;
+				throw new Exception(msg);
+			}
 		}
 
 		public async Task<bool> Delete(int id)
 		{
-			PaymentType paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.IdPaymentType == id);
-			if (paymentType == null)
+			try
 			{
-				throw new Exception("PaymentType not found!");
+				PaymentType? paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.IdPaymentType == id);
+				if (paymentType == null)
+				{
+					throw new Exception("PaymentType not found!");
+				}
+
+				_dbContext.PaymentType.Remove(paymentType);
+				await _dbContext.SaveChangesAsync();
+
+				return true;
 			}
+			catch (Exception ex)
+			{
+				string msg = ex.Message;
 
-			_dbContext.PaymentType.Remove(paymentType);
-			await _dbContext.SaveChangesAsync();
+				if (ex is DbUpdateException)
+				{
+					msg = ex.GetBaseException().Message;
+				}
 
-			return true;
+				throw new Exception(msg);
+			}
 		}
 
 		public async Task<PaymentType> GetByName(string name)
 		{
-			PaymentType paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.Name == name);
+			PaymentType? paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(p => p.Name == name);
 			if (paymentType == null)
 			{
 				throw new Exception("PaymentType not found!");

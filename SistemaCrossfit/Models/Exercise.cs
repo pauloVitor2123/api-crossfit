@@ -8,6 +8,6 @@ namespace SistemaCrossfit.Models
 		[Key]
 		[Column("id_exercise")]
 		public int IdExercise { get; set; }
-		public string Description { get; set; }
+		public string Description { get; set; } = null!;
 	}
 }
