@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.DTO;
+using SistemaCrossfit.Models;
+using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Controllers
@@ -25,16 +27,24 @@ namespace SistemaCrossfit.Controllers
             return response;
         }
 
-        [HttpPost]
-        [Route("validate-token")]
-        [Authorize]
-        public OkObjectResult ValidateToken(string token)
+        /*        [HttpPost]
+                [Route("validate-token")]
+                [Authorize]
+                public OkObjectResult ValidateToken(string token)
+                {
+                    if (token == null)
+                    {
+                        throw new ArgumentNullException("Invalid token");
+                    }
+                    return Ok(token);
+                }*/
+
+        [HttpGet]
+
+        public async Task<ActionResult<List<User>>> GetUsers()
         {
-            if (token == null)
-            {
-                throw new ArgumentNullException("Invalid token");
-            }
-            return Ok(token);
+            List<User> users = await _userRepository.GetAll();
+            return Ok(users);
         }
     }
 }
