@@ -10,6 +10,7 @@ namespace SistemaCrossfit.Models
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
+        [JsonIgnore]
         [Column("deleted_at")]
         public DateTime? DeletedAt { get; set; }
     }

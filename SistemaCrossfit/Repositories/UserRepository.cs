@@ -10,6 +10,17 @@ namespace SistemaCrossfit.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDBContext _dbContext;
+
+        public async Task<List<User>> GetAll()
+        {
+            List<User> users = await _dbContext.User.ToListAsync();
+
+            foreach (var user in users)
+            {
+                user.Profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
+            }
+            return users;
+        }
         public UserRepository(AppDBContext appDbContext)
         {
             _dbContext = appDbContext;
