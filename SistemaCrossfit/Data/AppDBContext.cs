@@ -21,6 +21,7 @@ namespace SistemaCrossfit.Data
         public DbSet<Telephone> Telephone { get; set; }
         public DbSet<Class> Class { get; set; }
         public DbSet<ContentManagement> ContentManagement { get; set; }
+        public DbSet<StudentPoints> StudentPoints { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +37,7 @@ namespace SistemaCrossfit.Data
             modelBuilder.ApplyConfiguration(new PaymentTypeMap());
             modelBuilder.ApplyConfiguration(new TelephoneMap());
             modelBuilder.ApplyConfiguration(new ClassMap());
+            modelBuilder.ApplyConfiguration(new StudentPointsMap());
             base.OnModelCreating(modelBuilder);
         }
 

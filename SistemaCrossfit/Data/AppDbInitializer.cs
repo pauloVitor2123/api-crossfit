@@ -92,6 +92,15 @@ namespace SistemaCrossfit.Data
                     Console.WriteLine("Classes seeds created successfully!");
                 }
                 await context.SaveChangesAsync();
+
+                if (!context.StudentPoints.Any())
+                {
+                    var studentPoints = StudentPointsFactory.CreateSeedStudentPoints();
+                    await context.AddRangeAsync(studentPoints.ToArray());
+                    Console.WriteLine("StudentPoints seeds created successfully!");
+                }
+                await context.SaveChangesAsync();
+
                 Console.WriteLine("Seeds created successfully!");
             }
         }
