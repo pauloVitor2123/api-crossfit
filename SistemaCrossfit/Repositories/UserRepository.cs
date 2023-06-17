@@ -53,6 +53,38 @@ namespace SistemaCrossfit.Repositories
             return user;
         }
 
+        private async Task deleteAdminByIdUser(int IdUser)
+        {
+            AdminRepository adminRepository = new AdminRepository(_dbContext);
+            Admin admin = await _dbContext.Admin.FirstOrDefaultAsync(admin => admin.IdUser == IdUser);
+            if (admin == null)
+            {
+                throw new Exception("Admin not found!");
+            }
+            await adminRepository.DeleteReturningIdUser(admin.IdAdmin);
+        }
+        private async Task deleteStudentByIdUser(int IdUser)
+        {
+            StudentRepository studentRepository = new StudentRepository(_dbContext);
+            Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == IdUser);
+            if (student == null)
+            {
+                throw new Exception("Student not found!");
+            }
+            await studentRepository.DeleteReturningIdUser(student.IdStudent);
+        }
+
+        private async Task deleteProfessorByIdUser(int IdUser)
+        {
+            ProfessorRepository professorRepository = new ProfessorRepository(_dbContext);
+            Professor professor = await _dbContext.Professor.FirstOrDefaultAsync(professor => professor.IdUser == IdUser);
+            if (professor == null)
+            {
+                throw new Exception("Professor not found!");
+            }
+            await professorRepository.DeleteReturningIdUser(professor.IdProfessor);
+        }
+
         public async Task<bool> Delete(int id)
         {
             User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == id);
@@ -60,6 +92,27 @@ namespace SistemaCrossfit.Repositories
             {
                 throw new Exception("User not found!");
             }
+
+
+            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
+            if (profile == null)
+            {
+                throw new Exception("Profile not found!");
+            }
+            if (profile.NormalizedName == "ADMIN")
+            {
+                await this.deleteAdminByIdUser(id);
+            }
+            else if (profile.NormalizedName == "STUDENT")
+            {
+                await this.deleteStudentByIdUser(id);
+            }
+            else if (profile.NormalizedName == "PROFESSOR")
+            {
+                await this.deleteProfessorByIdUser(id);
+
+            }
+
 
             _dbContext.User.Remove(user);
             await _dbContext.SaveChangesAsync();

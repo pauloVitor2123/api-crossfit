@@ -40,11 +40,24 @@ namespace SistemaCrossfit.Controllers
                 }*/
 
         [HttpGet]
-
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             List<User> users = await _userRepository.GetAll();
             return Ok(users);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Boolean>> DeleteUserById(int id)
+        {
+            try
+            {
+                Boolean deleted = await _userRepository.Delete(id);
+                return Ok(deleted);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }

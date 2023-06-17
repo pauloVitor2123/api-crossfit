@@ -24,6 +24,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<CreateProfessorBody>>> GetProfessors()
         {
             List<CreateProfessorBody> professors = await _professorRepository.GetAllProfessors();
@@ -31,6 +32,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<CreateProfessorBody>> GetProfessorById(int id)
         {
             Professor professor = await _professorRepository.GetById(id);
@@ -41,6 +43,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Professor>> CreateProfessor([FromBody] CreateProfessorBody professorBody)
         {
             User user = new User();
@@ -66,6 +69,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Professor>> UpdatedProfessor(int id, [FromBody] CreateProfessorBody professorBody)
         {
             Professor professor = await _professorRepository.GetById(id);
@@ -79,7 +83,8 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Professor>> DeleteStudentById(int id)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult<Professor>> DeleteProfessorById(int id)
         {
             int idUser = await _professorRepository.DeleteReturningIdUser(id);
             Boolean deleted = await _userRepository.Delete(idUser);
