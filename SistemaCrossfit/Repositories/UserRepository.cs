@@ -11,6 +11,11 @@ namespace SistemaCrossfit.Repositories
     {
         private readonly AppDBContext _dbContext;
 
+        public UserRepository(AppDBContext appDbContext)
+        {
+            _dbContext = appDbContext;
+        }
+
         public async Task<List<User>> GetAll()
         {
             List<User> users = await _dbContext.User.ToListAsync();
@@ -20,10 +25,6 @@ namespace SistemaCrossfit.Repositories
                 user.Profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
             }
             return users;
-        }
-        public UserRepository(AppDBContext appDbContext)
-        {
-            _dbContext = appDbContext;
         }
 
         public async Task<User> Create(User user)
@@ -65,7 +66,8 @@ namespace SistemaCrossfit.Repositories
         }
         private async Task deleteStudentByIdUser(int IdUser)
         {
-            StudentRepository studentRepository = new StudentRepository(_dbContext);
+            PaymentService paymentService = new PaymentService(_dbContext);
+            StudentRepository studentRepository = new StudentRepository(_dbContext, paymentService);
             Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == IdUser);
             if (student == null)
             {
