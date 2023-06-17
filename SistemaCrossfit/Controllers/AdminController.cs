@@ -26,7 +26,7 @@ namespace SistemaCrossfit.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<Admin>>> GetAdmins()
+        public async Task<ActionResult<List<CreateAdminBody>>> GetAdmins()
         {
             List<CreateAdminBody> admins = await _adminRepository.GetAllAdmins();
             return Ok(admins);
