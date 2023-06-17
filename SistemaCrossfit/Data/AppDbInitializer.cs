@@ -100,6 +100,13 @@ namespace SistemaCrossfit.Data
                     Console.WriteLine("StudentPoints seeds created successfully!");
                 }
                 await context.SaveChangesAsync();
+                if (!context.ContentManagement.Any())
+                {
+                    var contentManagements = ContentManagementFactory.CreateSeedContentManagements();
+                    await context.AddRangeAsync(contentManagements.ToArray());
+                    Console.WriteLine("ContentManagement seeds created successfully!");
+                }
+                await context.SaveChangesAsync();
 
                 Console.WriteLine("Seeds created successfully!");
             }
