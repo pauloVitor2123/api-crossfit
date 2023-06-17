@@ -17,11 +17,6 @@ namespace SistemaCrossfit.Controllers
         {
             this.contentManagementRepository = contentManagementRepository;
         }
-        //public interface IContentManagementRepository
-        //{
-        //    Task<ContentManagementDto> Get();
-        //    Task CreateorUpdate(ContentManagementRequest entityModel);
-        //}
         [HttpGet]
         public async Task<ActionResult<ContentManagementDto>> Get()
         {

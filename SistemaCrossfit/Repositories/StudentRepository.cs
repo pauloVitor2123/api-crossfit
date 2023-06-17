@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
 using SistemaCrossfit.DTO;
+using SistemaCrossfit.Migrations;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
+using SistemaCrossfit.Request;
+using SistemaCrossfit.Services;
 using System.Net;
 
 namespace SistemaCrossfit.Repositories
@@ -10,9 +13,11 @@ namespace SistemaCrossfit.Repositories
     public class StudentRepository : IStudentRepository
     {
         private readonly AppDBContext _dbContext;
-        public StudentRepository(AppDBContext appDbContext)
+        private readonly PaymentService paymentService;
+        public StudentRepository(AppDBContext appDbContext, PaymentService paymentService)
         {
             _dbContext = appDbContext;
+            this.paymentService = paymentService;
         }
 
         public async Task<List<CreateStudentBody>> GetAll()
@@ -45,8 +50,13 @@ namespace SistemaCrossfit.Repositories
         public async Task<Student> Create(Student student)
         {
 
-            await _dbContext.Student.AddAsync(student);
+            var user =  await _dbContext.Student.AddAsync(student);
             await _dbContext.SaveChangesAsync();
+            await paymentService.CreatePayment(new CreatePaymentRequest()
+            {
+                IdAdmin = null,
+                IdStudent = user.Entity.IdStudent
+            });
 
             return student;
         }
