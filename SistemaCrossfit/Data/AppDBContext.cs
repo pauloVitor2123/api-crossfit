@@ -22,6 +22,7 @@ namespace SistemaCrossfit.Data
         public DbSet<Class> Class { get; set; }								= null!;
         public DbSet<ContentManagement> ContentManagement { get; set; }		= null!;
         public DbSet<StudentPoints> StudentPoints { get; set; }				= null!;
+        public DbSet<Payment> Payment { get; set; }							= null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

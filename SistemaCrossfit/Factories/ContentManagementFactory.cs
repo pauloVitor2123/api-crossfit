@@ -11,7 +11,6 @@ namespace SistemaCrossfit.Factories
 
             ContentManagement contentManagement1 = new ContentManagement()
             {
-                IdContentManagement = 1,
                 IdAddress = 1,
                 IdAdmin = 1,
                 Titulo = "Titulo 1",

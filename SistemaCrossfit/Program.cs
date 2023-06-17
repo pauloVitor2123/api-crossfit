@@ -5,6 +5,7 @@ using SistemaCrossfit.Data;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
+using SistemaCrossfit.Services;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -66,6 +67,7 @@ namespace SistemaCrossfit
             builder.Services.AddScoped<IContentManagementRepository, ContentManagementRepository>();
             builder.Services.AddScoped<IStudentPointsRepository, StudentPointsRepository>();
             builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>();
+            builder.Services.AddScoped<PaymentService>();
 
 
             var app = builder.Build();
