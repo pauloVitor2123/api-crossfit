@@ -18,15 +18,6 @@ namespace SistemaCrossfit.Controllers
             this._userRepository = userRepository;
         }
 
-        [HttpPost]
-        [Route("login")]
-        [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody] LoginBody login)
-        {
-            var response = await _userRepository.Login(login);
-            return response;
-        }
-
         /*        [HttpPost]
                 [Route("validate-token")]
                 [Authorize]
@@ -40,13 +31,16 @@ namespace SistemaCrossfit.Controllers
                 }*/
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             List<User> users = await _userRepository.GetAll();
             return Ok(users);
         }
 
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Boolean>> DeleteUserById(int id)
         {
             try
@@ -58,6 +52,48 @@ namespace SistemaCrossfit.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
+        }
+
+        [HttpGet("professor/{id}")]
+        [Authorize]
+        public async Task<ActionResult<CreateProfessorBody>> GetProfesssorByUserId(int id)
+        {
+            User user = await _userRepository.GetById(id);
+            Professor professor = await _userRepository.GetProfessorByIdUser(user.IdUser);
+            CreateProfessorBody body = new CreateProfessorBody(user, professor.IdProfessor);
+
+            return Ok(body);
+        }
+
+        [HttpGet("admin/{id}")]
+        [Authorize]
+        public async Task<ActionResult<CreateAdminBody>> GetAdminByUserId(int id)
+        {
+            User user = await _userRepository.GetById(id);
+            Admin admin = await _userRepository.GetAdminByIdUser(user.IdUser);
+            CreateAdminBody body = new CreateAdminBody(user, admin.IdAdmin);
+
+            return Ok(body);
+        }
+
+        [HttpGet("student/{id}")]
+        [Authorize]
+        public async Task<ActionResult<CreateStudentBody>> GetStudentByUserId(int id)
+        {
+            User user = await _userRepository.GetById(id);
+            Student student = await _userRepository.GetStudentByIdUser(user.IdUser);
+            CreateStudentBody body = new CreateStudentBody(user, student);
+
+            return Ok(body);
+        }
+
+        [HttpPost]
+        [Route("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] LoginBody login)
+        {
+            var response = await _userRepository.Login(login);
+            return response;
         }
     }
 }

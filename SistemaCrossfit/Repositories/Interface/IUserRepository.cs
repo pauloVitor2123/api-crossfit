@@ -10,6 +10,9 @@ namespace SistemaCrossfit.Repositories.Interface
         Task<User> Create(User user);
         Task<User> Update(User user, int id);
         Task<User> GetById(int id);
+        Task<Professor> GetProfessorByIdUser(int idUser);
+        Task<Admin> GetAdminByIdUser(int idUser);
+        Task<Student> GetStudentByIdUser(int idUser);
         Task<Boolean> Delete(int id);
     }
 }

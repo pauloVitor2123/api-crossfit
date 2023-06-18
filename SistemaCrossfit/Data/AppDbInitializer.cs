@@ -29,15 +29,18 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(profiles.ToArray());
                     Console.WriteLine("Genre seeds created successfully!");
                 }
-                await context.SaveChangesAsync();
+                if (!context.Profile.Any() || !context.Genre.Any())
+                {
+                    await context.SaveChangesAsync();
+                }
 
                 if (!context.User.Any())
                 {
                     var users = UserFactory.CreateSeedUsers();
                     await context.AddRangeAsync(users.ToArray());
                     Console.WriteLine("Users seeds created successfully!");
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
 
                 if (!context.Student.Any())
                 {
@@ -58,7 +61,10 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(professors.ToArray());
                     Console.WriteLine("Professors seeds created successfully!");
                 }
-                await context.SaveChangesAsync();
+                if (!context.Admin.Any() || !context.Professor.Any() || !context.Student.Any())
+                {
+                    await context.SaveChangesAsync();
+                }
                 if (!context.Exercise.Any())
                 {
                     var exercises = ExerciseFactory.CreateSeedExercises();
@@ -77,7 +83,10 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(status.ToArray());
                     Console.WriteLine("Status seeds created successfully!");
                 }
-                await context.SaveChangesAsync();
+                if (!context.Exercise.Any() || !context.PaymentType.Any() || !context.Status.Any())
+                {
+                    await context.SaveChangesAsync();
+                }
 
                 if (!context.Telephone.Any())
                 {
@@ -91,31 +100,34 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(classes.ToArray());
                     Console.WriteLine("Classes seeds created successfully!");
                 }
-                await context.SaveChangesAsync();
+                if (!context.Class.Any() || !context.Telephone.Any())
+                {
+                    await context.SaveChangesAsync();
+                }
 
                 if (!context.StudentPoints.Any())
                 {
                     var studentPoints = StudentPointsFactory.CreateSeedStudentPoints();
                     await context.AddRangeAsync(studentPoints.ToArray());
                     Console.WriteLine("StudentPoints seeds created successfully!");
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
 
                 if (!context.Address.Any())
                 {
                     var addresses = AddressFactory.CreateSeedAddresses();
                     await context.AddRangeAsync(addresses.ToArray());
                     Console.WriteLine("Address seeds created successfully!");
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
 
                 if (!context.ContentManagement.Any())
                 {
                     var contentManagements = ContentManagementFactory.CreateSeedContentManagements();
                     await context.AddRangeAsync(contentManagements.ToArray());
                     Console.WriteLine("ContentManagement seeds created successfully!");
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
 
                 Console.WriteLine("Seeds created successfully!");
             }

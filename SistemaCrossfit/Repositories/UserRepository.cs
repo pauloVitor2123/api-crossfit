@@ -131,6 +131,34 @@ namespace SistemaCrossfit.Repositories
             }
             return user;
         }
+        public async Task<Professor> GetProfessorByIdUser(int idUser)
+        {
+            Professor professor = await _dbContext.Professor.FirstOrDefaultAsync(professor => professor.IdUser == idUser);
+            if (professor == null)
+            {
+                throw new Exception("Professor not found!");
+            }
+            return professor;
+        }
+        public async Task<Admin> GetAdminByIdUser(int idUser)
+        {
+            Admin admin = await _dbContext.Admin.FirstOrDefaultAsync(admin => admin.IdUser == idUser);
+            if (admin == null)
+            {
+                throw new Exception("Admin not found!");
+            }
+            return admin;
+        }
+        public async Task<Student> GetStudentByIdUser(int idUser)
+        {
+            Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == idUser);
+            if (student == null)
+            {
+                throw new Exception("Student not found!");
+            }
+            return student;
+        }
+
 
         public async Task<dynamic> Login(LoginBody login)
         {
