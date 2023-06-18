@@ -16,13 +16,13 @@ namespace SistemaCrossfit.Factories
             };
             Genres.Add(male);
 
-            Genre famale = new()
+            Genre female = new()
             {
-                Name = "Famale",
-                NormalizedName = "FAMALE",
+                Name = "Female",
+                NormalizedName = "FEMALE",
                 Active = true
             };
-            Genres.Add(famale);
+            Genres.Add(female);
 
 
             Genre other = new()
