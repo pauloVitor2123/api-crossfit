@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SistemaCrossfit.Data;
 using SistemaCrossfit.Models;
+using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Controllers
@@ -10,10 +12,12 @@ namespace SistemaCrossfit.Controllers
     public class ClassController : ControllerBase
     {
         private readonly IClassRespository _classRespository;
+        private readonly AppDBContext _dbContext;
 
-        public ClassController(IClassRespository classRespository)
+        public ClassController(IClassRespository classRespository, AppDBContext dbContext)
         {
             _classRespository = classRespository;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -41,9 +45,21 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Class>> CreateClass([FromBody] Class classCreate)
+        public async Task<ActionResult<Class>> CreateClass([FromBody] Class classCreate, int idAdmin)
         {
             var c = await _classRespository.Create(classCreate);
+            var idClass = c.IdClass;
+
+            var adminClassRepository = new AdminClassRepository(_dbContext);
+
+            var adminClass = new AdminClass
+            {
+                IdAdmin = idAdmin,
+                IdClass = idClass
+            };
+
+            await adminClassRepository.AddAsync(adminClass);
+
             return Ok(c);
         }
 
