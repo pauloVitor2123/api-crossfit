@@ -52,7 +52,6 @@ namespace SistemaCrossfit
                     )
                 );
 
-
             builder.Services.AddScoped<IBaseRepository<Address>, AddressRepository>();
             builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
             builder.Services.AddScoped<IBaseRepository<Telephone>, TelephoneRepository>();
@@ -69,6 +68,7 @@ namespace SistemaCrossfit
             builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>();
             builder.Services.AddScoped<PaymentService>();
 
+            builder.Services.AddScoped<IAdminClassRepository, AdminClassRepository>();
 
             var app = builder.Build();
 
@@ -86,14 +86,12 @@ namespace SistemaCrossfit
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             // Seed database
             AppDbInitializer.Seed(app);
 
             app.Run();
-
         }
     }
 }
