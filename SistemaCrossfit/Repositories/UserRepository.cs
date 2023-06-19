@@ -35,9 +35,9 @@ namespace SistemaCrossfit.Repositories
             return user;
         }
 
-        public async Task<User> Update(User user, int id)
+        public async Task<User> Update(User user)
         {
-            User userUpdated = await _dbContext.User.FirstOrDefaultAsync(u => u.IdUser == id);
+            User userUpdated = await _dbContext.User.FirstOrDefaultAsync(u => u.IdUser == user.IdUser);
 
             if (userUpdated == null)
             {
@@ -45,7 +45,10 @@ namespace SistemaCrossfit.Repositories
             }
 
             userUpdated.Email = user.Email;
-            userUpdated.Password = user.Password;
+            if (user.Password != "")
+            {
+                userUpdated.Password = user.Password;
+            }
             userUpdated.Name = user.Name;
             userUpdated.SocialName = user.SocialName;
 

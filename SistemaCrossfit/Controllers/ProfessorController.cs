@@ -77,7 +77,7 @@ namespace SistemaCrossfit.Controllers
             user.Name = professorBody.Name;
             user.SocialName = professorBody.SocialName;
 
-            await _userRepository.Update(user, professor.IdUser);
+            await _userRepository.Update(user);
 
             return Ok(professorBody);
         }

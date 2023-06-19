@@ -56,17 +56,14 @@ namespace SistemaCrossfit.Controllers
 
             var student = new Student();
             student.IdUser = userCreated.IdUser;
+            student.IdAddress = studentBody.IdAddress;
+            student.IdGenre = studentBody.IdGenre;
+            student.BirthDate = studentBody.BirthDate;
+            student.IsBlocked = studentBody.IsBlocked;
+            student.BlockDescription = studentBody.BlockDescription;
+
             await _studentRepository.Create(student);
 
-            studentBody.IdStudent = student.IdStudent;
-            studentBody.IdAddress = student.IdAddress;
-            studentBody.IdGenre = student.IdGenre;
-            studentBody.BirthDate = student.BirthDate;
-            studentBody.IsBlocked = student.IsBlocked;
-            studentBody.BlockDescription = student.BlockDescription;
-            studentBody.CreatedAt = student.CreatedAt;
-            studentBody.UpdatedAt = student.UpdatedAt;
-            studentBody.DeletedAt = student.DeletedAt;
 
             return Ok(studentBody);
         }
@@ -75,14 +72,20 @@ namespace SistemaCrossfit.Controllers
         [Authorize]
         public async Task<ActionResult<CreateStudentBody>> UpdatedStudent(int id, [FromBody] CreateStudentBody studentBody)
         {
-            var user = new User();
+            var student = await _studentRepository.GetById(id);
+            User user = await _userRepository.GetById(student.IdUser);
+            user.IdUser = student.IdUser;
             user.Email = studentBody.Email;
             user.Password = studentBody.Password;
             user.Name = studentBody.Name;
             user.SocialName = studentBody.SocialName;
+            student.BirthDate = studentBody.BirthDate;
+            if (studentBody.IdGenre != 0)
+            {
+                student.IdGenre = studentBody.IdGenre;
+            }
 
-            var student = await _studentRepository.GetById(id);
-            await _userRepository.Update(user, student.IdUser);
+            await _userRepository.Update(user);
 
             await _studentRepository.Update(student, id);
 

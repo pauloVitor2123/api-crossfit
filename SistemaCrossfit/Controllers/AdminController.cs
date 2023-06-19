@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
+using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Controllers
@@ -72,13 +73,15 @@ namespace SistemaCrossfit.Controllers
         [Authorize]
         public async Task<ActionResult<Admin>> UpdatedAdmin(int id, [FromBody] CreateAdminBody adminBody)
         {
+            Admin admin = await _adminRepository.GetById(id);
             User user = new User();
+            user.IdUser = admin.IdUser;
             user.Email = adminBody.Email;
             user.Password = adminBody.Password;
             user.Name = adminBody.Name;
             user.SocialName = adminBody.SocialName;
 
-            await _userRepository.Update(user, id);
+            await _userRepository.Update(user);
 
             return Ok(adminBody);
         }

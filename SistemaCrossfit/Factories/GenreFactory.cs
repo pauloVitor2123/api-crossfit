@@ -10,7 +10,7 @@ namespace SistemaCrossfit.Factories
 
             Genre male = new()
             {
-                Name = "Male",
+                Name = "Masculino",
                 NormalizedName = "MALE",
                 Active = true
             };
@@ -18,7 +18,7 @@ namespace SistemaCrossfit.Factories
 
             Genre female = new()
             {
-                Name = "Female",
+                Name = "Feminino",
                 NormalizedName = "FEMALE",
                 Active = true
             };
@@ -27,7 +27,7 @@ namespace SistemaCrossfit.Factories
 
             Genre other = new()
             {
-                Name = "Other",
+                Name = "Outro",
                 NormalizedName = "OTHER",
                 Active = true
             };

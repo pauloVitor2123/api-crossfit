@@ -10,7 +10,7 @@ namespace SistemaCrossfit.Factories
 
             Profile admin = new()
             {
-                Name = "Admin",
+                Name = "Administrador",
                 NormalizedName = "ADMIN",
                 Active = true
             };
@@ -18,7 +18,7 @@ namespace SistemaCrossfit.Factories
 
             Profile student = new()
             {
-                Name = "Student",
+                Name = "Estudante",
                 NormalizedName = "STUDENT",
                 Active = true
             };
