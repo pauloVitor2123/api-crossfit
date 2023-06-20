@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
 using SistemaCrossfit.DTO;
-using SistemaCrossfit.Migrations;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
 using SistemaCrossfit.Request;
@@ -50,7 +49,7 @@ namespace SistemaCrossfit.Repositories
         public async Task<Student> Create(Student student)
         {
 
-            var user =  await _dbContext.Student.AddAsync(student);
+            var user = await _dbContext.Student.AddAsync(student);
             await _dbContext.SaveChangesAsync();
             await paymentService.CreatePayment(new CreatePaymentRequest()
             {
@@ -70,7 +69,7 @@ namespace SistemaCrossfit.Repositories
             }
 
             studentUpdated.IdAddress = student.IdAddress;
-            studentUpdated.IdGenre = student.IdGenre;
+            studentUpdated.IdGender = student.IdGender;
             studentUpdated.BirthDate = student.BirthDate;
 
             await _dbContext.SaveChangesAsync();

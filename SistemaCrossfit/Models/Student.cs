@@ -11,14 +11,14 @@ namespace SistemaCrossfit.Models
         public int IdStudent { get; set; }
         public int? IdAddress { get; set; }
         public int IdUser { get; set; }
-        public int IdGenre { get; set; }
+        public int IdGender { get; set; }
         public DateTime? BirthDate { get; set; }
         public bool? IsBlocked { get; set; }
         public string? BlockDescription { get; set; }
 
         /*---------------------------------*/
         [JsonIgnore]
-        public Genre? Genre { get; set; }
+        public Gender? Gender { get; set; }
         [JsonIgnore]
         public Address? Address { get; set; }
         public User User { get; set; }

@@ -53,7 +53,7 @@ namespace SistemaCrossfit
                 );
 
             builder.Services.AddScoped<IBaseRepository<Address>, AddressRepository>();
-            builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
+            builder.Services.AddScoped<IBaseRepository<Gender>, GenderRepository>();
             builder.Services.AddScoped<IBaseRepository<Telephone>, TelephoneRepository>();
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();

@@ -13,7 +13,7 @@ namespace SistemaCrossfit.DTO
             SocialName = user.SocialName;
             IdStudent = student.IdStudent;
             IdAddress = student.IdAddress;
-            IdGenre = student.IdGenre;
+            IdGender = student.IdGender;
             BirthDate = student.BirthDate;
             IsBlocked = student.IsBlocked;
             BlockDescription = student.BlockDescription;
@@ -24,7 +24,7 @@ namespace SistemaCrossfit.DTO
         /*-------- Student Props ----------*/
         public int? IdStudent { get; set; }
         public int? IdAddress { get; set; }
-        public int IdGenre { get; set; }
+        public int IdGender { get; set; }
         public DateTime? BirthDate { get; set; }
         public bool? IsBlocked { get; set; }
         public string? BlockDescription { get; set; }

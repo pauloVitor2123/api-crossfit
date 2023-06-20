@@ -12,9 +12,9 @@ namespace SistemaCrossfit.Data.Map
             builder.Property(x => x.IdStudent)
                 .HasColumnName("id_student")
                 .ValueGeneratedOnAdd();
-            builder.Property(x => x.IdGenre)
+            builder.Property(x => x.IdGender)
                 .IsRequired()
-                .HasColumnName("id_genre");
+                .HasColumnName("id_gender");
             builder.Property(x => x.IdUser)
                 .IsRequired()
                 .HasColumnName("id_user");
@@ -38,7 +38,7 @@ namespace SistemaCrossfit.Data.Map
                .IsRequired(false);
 
             // relationship 1 to Many - Many to 1
-            builder.HasOne(x => x.Genre).WithMany().HasForeignKey(x => x.IdGenre);
+            builder.HasOne(x => x.Gender).WithMany().HasForeignKey(x => x.IdGender);
 
             // relationship 1 to One - One to 1
             builder.HasOne(x => x.User).WithOne(x => x.Student).HasForeignKey<Student>(x => x.IdUser);

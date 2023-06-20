@@ -6,52 +6,52 @@ using System.Data;
 
 namespace SistemaCrossfit.Controllers
 {
-    [Route("api/genre")]
+    [Route("api/gender")]
     [ApiController]
-    public class GenreController : ControllerBase
+    public class GenderController : ControllerBase
     {
-        private readonly IBaseRepository<Genre> _genreRepository;
-        public GenreController(IBaseRepository<Genre> GenreRepository)
+        private readonly IBaseRepository<Gender> _genderRepository;
+        public GenderController(IBaseRepository<Gender> GenderRepository)
         {
-            this._genreRepository = GenreRepository;
+            this._genderRepository = GenderRepository;
         }
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<Genre>>> GetGenres()
+        public async Task<ActionResult<List<Gender>>> GetGenders()
         {
-            List<Genre> genres = await _genreRepository.GetAll();
-            return Ok(genres);
+            List<Gender> genders = await _genderRepository.GetAll();
+            return Ok(genders);
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<Genre>> GetGenreById(int id)
+        public async Task<ActionResult<Gender>> GetGenderById(int id)
         {
-            Genre genre = await _genreRepository.GetById(id);
-            return Ok(genre);
+            Gender gender = await _genderRepository.GetById(id);
+            return Ok(gender);
         }
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult<Genre>> CreateGenre([FromBody] Genre Genre)
+        public async Task<ActionResult<Gender>> CreateGender([FromBody] Gender Gender)
         {
-            Genre g = await _genreRepository.Create(Genre);
+            Gender g = await _genderRepository.Create(Gender);
             return Ok(g);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult<Genre>> UpdatedGenre(int id, [FromBody] Genre genre)
+        public async Task<ActionResult<Gender>> UpdatedGender(int id, [FromBody] Gender gender)
         {
-            Genre g = await _genreRepository.Update(genre, id);
+            Gender g = await _genderRepository.Update(gender, id);
             return Ok(g);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult<Genre>> DeleteGenreById(int id)
+        public async Task<ActionResult<Gender>> DeleteGenderById(int id)
         {
-            Boolean deleted = await _genreRepository.Delete(id);
+            Boolean deleted = await _genderRepository.Delete(id);
             return Ok(deleted);
         }
     }

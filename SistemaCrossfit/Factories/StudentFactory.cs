@@ -11,7 +11,7 @@ namespace SistemaCrossfit.Factories
             Student student = new()
             {
                 IdUser = 2,
-                IdGenre = 1,
+                IdGender = 1,
                 BirthDate = DateTime.Now
             };
             students.Add(student);

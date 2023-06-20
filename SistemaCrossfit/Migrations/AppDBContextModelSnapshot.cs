@@ -148,14 +148,6 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnName("updated_at")
                         .HasColumnOrder(2147483645);
 
-                    b.Property<int>("id_admin")
-                        .HasColumnType("int")
-                        .HasColumnName("id_admin1");
-
-                    b.Property<int>("id_class")
-                        .HasColumnType("int")
-                        .HasColumnName("id_class1");
-
                     b.HasKey("IdAdmin", "IdClass");
 
                     b.HasIndex("IdClass");
@@ -176,6 +168,10 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at")
                         .HasColumnOrder(2147483646);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("date");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2")
@@ -217,6 +213,8 @@ namespace SistemaCrossfit.Migrations
                     b.HasKey("IdClass");
 
                     b.HasIndex("IdProfessor");
+
+                    b.HasIndex("IdStatus");
 
                     b.ToTable("Class");
                 });
@@ -330,14 +328,14 @@ namespace SistemaCrossfit.Migrations
                     b.ToTable("Exercise");
                 });
 
-            modelBuilder.Entity("SistemaCrossfit.Models.Genre", b =>
+            modelBuilder.Entity("SistemaCrossfit.Models.Gender", b =>
                 {
-                    b.Property<int>("IdGenre")
+                    b.Property<int>("IdGender")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_genre");
+                        .HasColumnName("id_gender");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdGenre"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdGender"), 1L, 1);
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit")
@@ -370,9 +368,9 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnName("updated_at")
                         .HasColumnOrder(2147483645);
 
-                    b.HasKey("IdGenre");
+                    b.HasKey("IdGender");
 
-                    b.ToTable("Genre");
+                    b.ToTable("Gender");
                 });
 
             modelBuilder.Entity("SistemaCrossfit.Models.Payment", b =>
@@ -622,9 +620,9 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id_address");
 
-                    b.Property<int>("IdGenre")
+                    b.Property<int>("IdGender")
                         .HasColumnType("int")
-                        .HasColumnName("id_genre");
+                        .HasColumnName("id_gender");
 
                     b.Property<int>("IdUser")
                         .HasColumnType("int")
@@ -647,7 +645,7 @@ namespace SistemaCrossfit.Migrations
                         .IsUnique()
                         .HasFilter("[id_address] IS NOT NULL");
 
-                    b.HasIndex("IdGenre");
+                    b.HasIndex("IdGender");
 
                     b.HasIndex("IdUser")
                         .IsUnique();
@@ -679,14 +677,6 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at")
                         .HasColumnOrder(2147483645);
-
-                    b.Property<int>("id_class")
-                        .HasColumnType("int")
-                        .HasColumnName("id_class1");
-
-                    b.Property<int>("id_student")
-                        .HasColumnType("int")
-                        .HasColumnName("id_student1");
 
                     b.HasKey("IdStudent", "IdClass");
 
@@ -865,7 +855,15 @@ namespace SistemaCrossfit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SistemaCrossfit.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("IdStatus")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Professor");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("SistemaCrossfit.Models.ContentManagement", b =>
@@ -935,9 +933,9 @@ namespace SistemaCrossfit.Migrations
                         .WithOne()
                         .HasForeignKey("SistemaCrossfit.Models.Student", "IdAddress");
 
-                    b.HasOne("SistemaCrossfit.Models.Genre", "Genre")
+                    b.HasOne("SistemaCrossfit.Models.Gender", "Gender")
                         .WithMany()
-                        .HasForeignKey("IdGenre")
+                        .HasForeignKey("IdGender")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -949,7 +947,7 @@ namespace SistemaCrossfit.Migrations
 
                     b.Navigation("Address");
 
-                    b.Navigation("Genre");
+                    b.Navigation("Gender");
 
                     b.Navigation("User");
                 });

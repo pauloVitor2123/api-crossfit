@@ -81,7 +81,7 @@ namespace SistemaCrossfit.Controllers
         {
             studentBody.IdStudent = student.IdStudent;
             studentBody.IdAddress = student.IdAddress;
-            studentBody.IdGenre = student.IdGenre;
+            studentBody.IdGender = student.IdGender;
             studentBody.BirthDate = student.BirthDate;
             studentBody.IsBlocked = student.IsBlocked;
             studentBody.BlockDescription = student.BlockDescription;
@@ -114,9 +114,9 @@ namespace SistemaCrossfit.Controllers
             user.Name = studentBody.Name;
             user.SocialName = studentBody.SocialName;
             student.BirthDate = studentBody.BirthDate;
-            if (studentBody.IdGenre != 0)
+            if (studentBody.IdGender != 0)
             {
-                student.IdGenre = studentBody.IdGenre;
+                student.IdGender = studentBody.IdGender;
             }
 
             await _userRepository.Update(user);

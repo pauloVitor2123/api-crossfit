@@ -12,8 +12,8 @@ using SistemaCrossfit.Data;
 namespace SistemaCrossfit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20230613185432_paymentType")]
-    partial class paymentType
+    [Migration("20230620171458_initial-migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,6 +125,176 @@ namespace SistemaCrossfit.Migrations
                     b.ToTable("Admin");
                 });
 
+            modelBuilder.Entity("SistemaCrossfit.Models.AdminClass", b =>
+                {
+                    b.Property<int>("IdAdmin")
+                        .HasColumnType("int")
+                        .HasColumnName("id_admin");
+
+                    b.Property<int>("IdClass")
+                        .HasColumnType("int")
+                        .HasColumnName("id_class");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
+
+                    b.HasKey("IdAdmin", "IdClass");
+
+                    b.HasIndex("IdClass");
+
+                    b.ToTable("AdminClass");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.Class", b =>
+                {
+                    b.Property<int>("IdClass")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_class");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdClass"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("date");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<TimeSpan>("EndHour")
+                        .HasColumnType("time")
+                        .HasColumnName("end_hour");
+
+                    b.Property<int>("IdProfessor")
+                        .HasColumnType("int")
+                        .HasColumnName("id_professor");
+
+                    b.Property<int>("IdStatus")
+                        .HasColumnType("int")
+                        .HasColumnName("id_status");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("name");
+
+                    b.Property<TimeSpan>("StartHour")
+                        .HasColumnType("time")
+                        .HasColumnName("start_hour");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
+
+                    b.HasKey("IdClass");
+
+                    b.HasIndex("IdProfessor");
+
+                    b.HasIndex("IdStatus");
+
+                    b.ToTable("Class");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.ContentManagement", b =>
+                {
+                    b.Property<int>("IdContentManagement")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdContentManagement"), 1L, 1);
+
+                    b.Property<string>("AboutDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("EmailContact")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdAddress")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdAdmin")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LogoImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PageTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubTitulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("Whatsapp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdContentManagement");
+
+                    b.HasIndex("IdAddress");
+
+                    b.HasIndex("IdAdmin");
+
+                    b.ToTable("ContentManagement");
+                });
+
             modelBuilder.Entity("SistemaCrossfit.Models.Exercise", b =>
                 {
                     b.Property<int>("IdExercise")
@@ -160,14 +330,14 @@ namespace SistemaCrossfit.Migrations
                     b.ToTable("Exercise");
                 });
 
-            modelBuilder.Entity("SistemaCrossfit.Models.Genre", b =>
+            modelBuilder.Entity("SistemaCrossfit.Models.Gender", b =>
                 {
-                    b.Property<int>("IdGenre")
+                    b.Property<int>("IdGender")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_genre");
+                        .HasColumnName("id_gender");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdGenre"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdGender"), 1L, 1);
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit")
@@ -200,9 +370,63 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnName("updated_at")
                         .HasColumnOrder(2147483645);
 
-                    b.HasKey("IdGenre");
+                    b.HasKey("IdGender");
 
-                    b.ToTable("Genre");
+                    b.ToTable("Gender");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.Payment", b =>
+                {
+                    b.Property<int>("IdPayment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPayment"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DatePayment")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("IdAdmin")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdPaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdStudent")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Invoice")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("IdPayment");
+
+                    b.HasIndex("IdAdmin");
+
+                    b.HasIndex("IdPaymentType");
+
+                    b.HasIndex("IdStatus");
+
+                    b.HasIndex("IdStudent");
+
+                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("SistemaCrossfit.Models.PaymentType", b =>
@@ -326,7 +550,7 @@ namespace SistemaCrossfit.Migrations
                     b.Property<int>("IdStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_profile");
+                        .HasColumnName("id_status");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdStatus"), 1L, 1);
 
@@ -398,9 +622,9 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id_address");
 
-                    b.Property<int>("IdGenre")
+                    b.Property<int>("IdGender")
                         .HasColumnType("int")
-                        .HasColumnName("id_genre");
+                        .HasColumnName("id_gender");
 
                     b.Property<int>("IdUser")
                         .HasColumnType("int")
@@ -423,12 +647,119 @@ namespace SistemaCrossfit.Migrations
                         .IsUnique()
                         .HasFilter("[id_address] IS NOT NULL");
 
-                    b.HasIndex("IdGenre");
+                    b.HasIndex("IdGender");
 
                     b.HasIndex("IdUser")
                         .IsUnique();
 
                     b.ToTable("Student");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.StudentCheckInClass", b =>
+                {
+                    b.Property<int>("IdStudent")
+                        .HasColumnType("int")
+                        .HasColumnName("id_student");
+
+                    b.Property<int>("IdClass")
+                        .HasColumnType("int")
+                        .HasColumnName("id_class");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
+
+
+                    b.HasKey("IdStudent", "IdClass");
+
+                    b.HasIndex("IdClass");
+
+                    b.ToTable("StudentCheckInClass");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.StudentPoints", b =>
+                {
+                    b.Property<int>("IdStudent")
+                        .HasColumnType("int")
+                        .HasColumnName("id_student");
+
+                    b.Property<int>("IdExercise")
+                        .HasColumnType("int")
+                        .HasColumnName("id_exercise");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int")
+                        .HasColumnName("points");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
+
+                    b.HasKey("IdStudent", "IdExercise");
+
+                    b.HasIndex("IdExercise");
+
+                    b.ToTable("StudentPoints");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.Telephone", b =>
+                {
+                    b.Property<int>("IdTelephone")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_telephone");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTelephone"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(2147483646);
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(2147483647);
+
+                    b.Property<int>("IdStudent")
+                        .HasMaxLength(255)
+                        .HasColumnType("int")
+                        .HasColumnName("id_student");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int")
+                        .HasColumnName("number");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(2147483645);
+
+                    b.HasKey("IdTelephone");
+
+                    b.ToTable("Telephone");
                 });
 
             modelBuilder.Entity("SistemaCrossfit.Models.User", b =>
@@ -500,6 +831,94 @@ namespace SistemaCrossfit.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SistemaCrossfit.Models.AdminClass", b =>
+                {
+                    b.HasOne("SistemaCrossfit.Models.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("IdAdmin")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaCrossfit.Models.Class", "Class")
+                        .WithMany()
+                        .HasForeignKey("IdClass")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Class");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.Class", b =>
+                {
+                    b.HasOne("SistemaCrossfit.Models.Professor", "Professor")
+                        .WithMany()
+                        .HasForeignKey("IdProfessor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaCrossfit.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("IdStatus")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Professor");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.ContentManagement", b =>
+                {
+                    b.HasOne("SistemaCrossfit.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("IdAddress")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaCrossfit.Models.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("IdAdmin")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Admin");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.Payment", b =>
+                {
+                    b.HasOne("SistemaCrossfit.Models.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("IdAdmin");
+
+                    b.HasOne("SistemaCrossfit.Models.PaymentType", "PaymentType")
+                        .WithMany()
+                        .HasForeignKey("IdPaymentType");
+
+                    b.HasOne("SistemaCrossfit.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("IdStatus")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaCrossfit.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("IdStudent")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("PaymentType");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("SistemaCrossfit.Models.Professor", b =>
                 {
                     b.HasOne("SistemaCrossfit.Models.User", "User")
@@ -517,9 +936,9 @@ namespace SistemaCrossfit.Migrations
                         .WithOne()
                         .HasForeignKey("SistemaCrossfit.Models.Student", "IdAddress");
 
-                    b.HasOne("SistemaCrossfit.Models.Genre", "Genre")
+                    b.HasOne("SistemaCrossfit.Models.Gender", "Gender")
                         .WithMany()
-                        .HasForeignKey("IdGenre")
+                        .HasForeignKey("IdGender")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -531,9 +950,47 @@ namespace SistemaCrossfit.Migrations
 
                     b.Navigation("Address");
 
-                    b.Navigation("Genre");
+                    b.Navigation("Gender");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.StudentCheckInClass", b =>
+                {
+                    b.HasOne("SistemaCrossfit.Models.Class", "Class")
+                        .WithMany()
+                        .HasForeignKey("IdClass")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SistemaCrossfit.Models.Student", "Admin")
+                        .WithMany()
+                        .HasForeignKey("IdStudent")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Class");
+                });
+
+            modelBuilder.Entity("SistemaCrossfit.Models.StudentPoints", b =>
+                {
+                    b.HasOne("SistemaCrossfit.Models.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("IdExercise")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaCrossfit.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("IdStudent")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("SistemaCrossfit.Models.User", b =>

@@ -2,10 +2,10 @@
 
 namespace SistemaCrossfit.Models
 {
-    public class Genre : BaseModel
+    public class Gender : BaseModel
     {
         [Key]
-        public int IdGenre { get; set; }
+        public int IdGender { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }
         public bool Active { get; set; }

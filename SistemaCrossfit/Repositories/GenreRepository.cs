@@ -5,62 +5,62 @@ using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Repositories
 {
-    public class GenreRepository : IBaseRepository<Genre>
+    public class GenderRepository : IBaseRepository<Gender>
     {
         private readonly AppDBContext _dbContext;
-        public GenreRepository(AppDBContext appDbContext)
+        public GenderRepository(AppDBContext appDbContext)
         {
             _dbContext = appDbContext;
         }
 
-        public async Task<List<Genre>> GetAll()
+        public async Task<List<Gender>> GetAll()
         {
-            return await _dbContext.Genre.ToListAsync();
+            return await _dbContext.Gender.ToListAsync();
         }
 
-        public async Task<Genre> GetById(int id)
+        public async Task<Gender> GetById(int id)
         {
-            Genre genre = await _dbContext.Genre.FirstOrDefaultAsync(genre => genre.IdGenre == id);
-            if (genre == null)
+            Gender gender = await _dbContext.Gender.FirstOrDefaultAsync(gender => gender.IdGender == id);
+            if (gender == null)
             {
                 throw new Exception("User not found!");
             }
 
-            return genre;
+            return gender;
         }
 
-        public async Task<Genre> Create(Genre Genre)
+        public async Task<Gender> Create(Gender Gender)
         {
-            await _dbContext.Genre.AddAsync(Genre);
+            await _dbContext.Gender.AddAsync(Gender);
             await _dbContext.SaveChangesAsync();
-            return Genre;
+            return Gender;
         }
 
-        public async Task<Genre> Update(Genre genre, int id)
+        public async Task<Gender> Update(Gender gender, int id)
         {
-            Genre genreUpdated = await _dbContext.Genre.FirstOrDefaultAsync(p => p.IdGenre == id);
-            if (genreUpdated == null)
+            Gender genderUpdated = await _dbContext.Gender.FirstOrDefaultAsync(p => p.IdGender == id);
+            if (genderUpdated == null)
             {
                 throw new Exception("User not found!");
             }
 
-            genreUpdated.NormalizedName = genre.NormalizedName;
-            genreUpdated.Name = genre.Name;
+            genderUpdated.NormalizedName = gender.NormalizedName;
+            genderUpdated.Name = gender.Name;
 
             await _dbContext.SaveChangesAsync();
 
-            return genreUpdated;
+            return genderUpdated;
         }
 
         public async Task<Boolean> Delete(int id)
         {
-            Genre genre = await _dbContext.Genre.FirstOrDefaultAsync(genre => genre.IdGenre == id);
-            if (genre == null)
+            Gender gender = await _dbContext.Gender.FirstOrDefaultAsync(gender => gender.IdGender == id);
+            if (gender == null)
             {
                 throw new Exception("User not found!");
             }
 
-            _dbContext.Genre.Remove(genre);
+            _dbContext.Gender.Remove(gender);
             await _dbContext.SaveChangesAsync();
 
             return true;

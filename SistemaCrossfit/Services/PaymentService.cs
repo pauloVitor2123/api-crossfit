@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
 using SistemaCrossfit.DTO;
-using SistemaCrossfit.Migrations;
-using SistemaCrossfit.Models;
 using SistemaCrossfit.Request;
 
 namespace SistemaCrossfit.Services

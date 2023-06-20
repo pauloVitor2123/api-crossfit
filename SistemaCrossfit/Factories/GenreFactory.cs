@@ -2,39 +2,39 @@
 
 namespace SistemaCrossfit.Factories
 {
-    public class GenreFactory
+    public class GenderFactory
     {
-        public static List<Genre> CreateSeedGenres()
+        public static List<Gender> CreateSeedGenders()
         {
-            List<Genre> Genres = new List<Genre>();
+            List<Gender> Genders = new List<Gender>();
 
-            Genre male = new()
+            Gender male = new()
             {
                 Name = "Masculino",
                 NormalizedName = "MALE",
                 Active = true
             };
-            Genres.Add(male);
+            Genders.Add(male);
 
-            Genre female = new()
+            Gender female = new()
             {
                 Name = "Feminino",
                 NormalizedName = "FEMALE",
                 Active = true
             };
-            Genres.Add(female);
+            Genders.Add(female);
 
 
-            Genre other = new()
+            Gender other = new()
             {
                 Name = "Outro",
                 NormalizedName = "OTHER",
                 Active = true
             };
-            Genres.Add(other);
+            Genders.Add(other);
 
 
-            return Genres;
+            return Genders;
         }
     }
 }

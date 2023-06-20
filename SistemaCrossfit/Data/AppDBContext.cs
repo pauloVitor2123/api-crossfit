@@ -13,7 +13,7 @@ namespace SistemaCrossfit.Data
         public DbSet<Student> Student { get; set; }
         public DbSet<Professor> Professor { get; set; }
         public DbSet<Profile> Profile { get; set; }
-        public DbSet<Genre> Genre { get; set; }
+        public DbSet<Gender> Gender { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<Status> Status { get; set; }
         public DbSet<Exercise> Exercise { get; set; }
@@ -30,7 +30,7 @@ namespace SistemaCrossfit.Data
         {
             modelBuilder.ApplyConfiguration(new AddressMap());
             modelBuilder.ApplyConfiguration(new AdminMap());
-            modelBuilder.ApplyConfiguration(new GenreMap());
+            modelBuilder.ApplyConfiguration(new GenderMap());
             modelBuilder.ApplyConfiguration(new ProfessorMap());
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());

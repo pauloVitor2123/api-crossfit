@@ -26,13 +26,13 @@ namespace SistemaCrossfit.Data
                     Console.WriteLine("Profiles seeds created successfully!");
                 }
 
-                if (!context.Genre.Any())
+                if (!context.Gender.Any())
                 {
-                    var profiles = GenreFactory.CreateSeedGenres();
+                    var profiles = GenderFactory.CreateSeedGenders();
                     await context.AddRangeAsync(profiles.ToArray());
-                    Console.WriteLine("Genre seeds created successfully!");
+                    Console.WriteLine("Gender seeds created successfully!");
                 }
-                if (!context.Profile.Any() || !context.Genre.Any())
+                if (!context.Profile.Any() || !context.Gender.Any())
                 {
                     await context.SaveChangesAsync();
                 }
@@ -120,7 +120,7 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(exercises.ToArray());
                     Console.WriteLine("Exercises seeds created successfully!");
                 }
-                
+
                 if (!context.Exercise.Any() || !context.PaymentType.Any() || !context.Status.Any())
                 {
                     await context.SaveChangesAsync();
