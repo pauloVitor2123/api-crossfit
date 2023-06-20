@@ -15,7 +15,8 @@ namespace SistemaCrossfit.Factories
                 Name = "CrossFit",
                 StartHour = new TimeSpan(8, 0, 0),
                 EndHour = new TimeSpan(10, 30, 0),
-                Description = "Aula de força fisica e treinamento"
+                Description = "Aula de força fisica e treinamento",
+                Date = new DateTime().AddDays(1),
             };
             classes.Add(classCross);
 

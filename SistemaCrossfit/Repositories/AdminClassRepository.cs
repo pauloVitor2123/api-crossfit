@@ -26,6 +26,11 @@ namespace SistemaCrossfit.Repositories
                 .Where(ac => ac.IdAdmin == idAdmin && ac.IdClass == idClass)
                 .FirstOrDefaultAsync();
 
+            if (adminClass == null)
+            {
+                throw new Exception("Admin and Class not found");
+            }
+
             return adminClass;
         }
 
