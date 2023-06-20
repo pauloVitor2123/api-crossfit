@@ -24,6 +24,7 @@ namespace SistemaCrossfit.Data
         public DbSet<AdminClass> AdminClass { get; set; }
         public DbSet<StudentPoints> StudentPoints { get; set; }
         public DbSet<Payment> Payment { get; set; }
+        public DbSet<StudentCheckInClass> StudentCheckInClass { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +43,7 @@ namespace SistemaCrossfit.Data
             modelBuilder.ApplyConfiguration(new AdminClassMap());
             modelBuilder.ApplyConfiguration(new StudentPointsMap());
             modelBuilder.ApplyConfiguration(new AdminClassMap());
+            modelBuilder.ApplyConfiguration(new StudentCheckInClassMap());
             base.OnModelCreating(modelBuilder);
         }
 

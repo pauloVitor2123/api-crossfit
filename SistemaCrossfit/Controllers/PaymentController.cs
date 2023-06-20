@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.DTO;
-using SistemaCrossfit.Models;
 using SistemaCrossfit.Request;
 using SistemaCrossfit.Services;
 
@@ -11,16 +10,12 @@ namespace SistemaCrossfit.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly PaymentService paymentService;
+        private readonly PaymentService _paymentService;
 
         public PaymentController(PaymentService paymentService)
         {
-            this.paymentService = paymentService;
+            _paymentService = paymentService;
         }
-        //public async Task<PaymentDto> GetOpenInvoice(int IdPayment)
-        //public async Task<List<PaymentDto>> GetPaymentByStudentId(int IdStudent)
-        //public async Task CreatePayment(CreatePaymentRequest createPaymentRequest)
-        //public async Task UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
 
         [HttpGet("invoice")]
         [Authorize]
@@ -28,7 +23,7 @@ namespace SistemaCrossfit.Controllers
         {
             try
             {
-                PaymentDto paymentDto = await paymentService.GetOpenInvoice(IdPayment);
+                PaymentDto paymentDto = await _paymentService.GetOpenInvoice(IdPayment);
                 return Ok(paymentDto);
             }
             catch (System.Exception ex)
@@ -36,13 +31,14 @@ namespace SistemaCrossfit.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
         [HttpGet("invoices-by-student")]
         [Authorize]
         public async Task<ActionResult<List<PaymentDto>>> GetPaymentByStudentId(int IdStudent)
         {
             try
             {
-                var paymentDto = await paymentService.GetPaymentByStudentId(IdStudent);
+                var paymentDto = await _paymentService.GetPaymentByStudentId(IdStudent);
                 return Ok(paymentDto);
             }
             catch (System.Exception ex)
@@ -50,13 +46,14 @@ namespace SistemaCrossfit.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> CreatePayment(CreatePaymentRequest createPaymentRequest)
         {
             try
             {
-                await paymentService.CreatePayment(createPaymentRequest);
+                await _paymentService.CreatePayment(createPaymentRequest);
                 return Ok();
             }
             catch (System.Exception ex)
@@ -70,7 +67,7 @@ namespace SistemaCrossfit.Controllers
         {
             try
             {
-                var payment = await paymentService.GetPaymentById(id);
+                var payment = await _paymentService.GetPaymentById(id);
                 if (payment == null)
                 {
                     return StatusCode(404, "Payment not found");
@@ -89,7 +86,7 @@ namespace SistemaCrossfit.Controllers
         {
             try
             {
-                var payment = await paymentService.GetAll();
+                var payment = await _paymentService.GetAll();
                 if (payment == null)
                 {
                     return StatusCode(404, "Payment not found");
@@ -110,7 +107,7 @@ namespace SistemaCrossfit.Controllers
             try
             {
                 payment.IdPayment = id;
-                await paymentService.UpdatePayment(payment);
+                await _paymentService.UpdatePayment(payment);
                 return Ok();
             }
             catch (System.Exception ex)
@@ -119,5 +116,18 @@ namespace SistemaCrossfit.Controllers
             }
         }
 
+        [HttpPut("update-payment")]
+        public async Task<ActionResult> UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
+        {
+            try
+            {
+                await _paymentService.UpdatePayment(updatePaymentRequest);
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

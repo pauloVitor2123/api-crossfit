@@ -10,7 +10,7 @@ namespace SistemaCrossfit.Factories
 
             Status notStarted = new Status()
             {
-                Name = "Not Started",
+                Name = "Não Iniciado",
                 NormalizedName = "NOT_STARTED",
                 Active = true
             };
@@ -18,7 +18,7 @@ namespace SistemaCrossfit.Factories
 
             Status inProgress = new Status()
             {
-                Name = "In Progress",
+                Name = "Em Progresso",
                 NormalizedName = "IN_PROGRESS",
                 Active = true
             };
@@ -26,7 +26,7 @@ namespace SistemaCrossfit.Factories
 
             Status finalized = new Status()
             {
-                Name = "Finalized",
+                Name = "Finalizado",
                 NormalizedName = "FINALIZED",
                 Active = true
             };
@@ -34,7 +34,7 @@ namespace SistemaCrossfit.Factories
 
             Status pendent = new Status()
             {
-                Name = "Pendent",
+                Name = "Pendente",
                 NormalizedName = "PENDENT",
                 Active = true
             };
@@ -42,11 +42,11 @@ namespace SistemaCrossfit.Factories
 
             Status paymentDone = new Status()
             {
-                Name = "Payment Done",
+                Name = "Pagamento Feito",
                 NormalizedName = "PAYMENT_DONE",
                 Active = true
             };
-            status.Add(pendent);
+            status.Add(paymentDone);
 
 
             return status;

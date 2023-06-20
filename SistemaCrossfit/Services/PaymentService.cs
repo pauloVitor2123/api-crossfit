@@ -197,7 +197,16 @@ namespace SistemaCrossfit.Services
                 payment.IdPaymentType = updatePaymentRequest.IdPaymentType;
                 payment.Invoice = updatePaymentRequest.Invoice;
                 payment.DatePayment = updatePaymentRequest.DatePayment;
-                payment.IdStatus = 3;
+                var status = await _dbContext.Status.FirstOrDefaultAsync(x => x.NormalizedName == "PAYMENT_DONE");
+                if (status == null)
+                {
+                    payment.IdStatus = 5;
+                }
+                else
+                {
+                    payment.IdStatus = status.IdStatus;
+                }
+
                 await _dbContext.SaveChangesAsync();
 
                 await T.CommitAsync();
