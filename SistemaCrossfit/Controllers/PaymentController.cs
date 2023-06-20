@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.DTO;
-using SistemaCrossfit.Repositories.Interface;
+using SistemaCrossfit.Models;
 using SistemaCrossfit.Request;
 using SistemaCrossfit.Services;
 
@@ -22,6 +23,7 @@ namespace SistemaCrossfit.Controllers
         //public async Task UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
 
         [HttpGet("invoice")]
+        [Authorize]
         public async Task<ActionResult<PaymentDto>> GetOpenInvoice(int IdPayment)
         {
             try
@@ -35,6 +37,7 @@ namespace SistemaCrossfit.Controllers
             }
         }
         [HttpGet("invoices-by-student")]
+        [Authorize]
         public async Task<ActionResult<List<PaymentDto>>> GetPaymentByStudentId(int IdStudent)
         {
             try
@@ -48,6 +51,7 @@ namespace SistemaCrossfit.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> CreatePayment(CreatePaymentRequest createPaymentRequest)
         {
             try
@@ -60,12 +64,53 @@ namespace SistemaCrossfit.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("update-payment")]
-        public async Task<ActionResult> UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
+        [HttpGet("{id}")]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult<PaymentDto>> GetPaymentById(int id)
         {
             try
             {
-                await paymentService.UpdatePayment(updatePaymentRequest);
+                var payment = await paymentService.GetPaymentById(id);
+                if (payment == null)
+                {
+                    return StatusCode(404, "Payment not found");
+                }
+                return Ok(payment);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult<List<PaymentDto>>> GetPayments()
+        {
+            try
+            {
+                var payment = await paymentService.GetAll();
+                if (payment == null)
+                {
+                    return StatusCode(404, "Payment not found");
+                }
+                return Ok(payment);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult> UpdatePayment(int id, [FromBody] UpdatePaymentRequest payment)
+        {
+            try
+            {
+                payment.IdPayment = id;
+                await paymentService.UpdatePayment(payment);
                 return Ok();
             }
             catch (System.Exception ex)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
 using SistemaCrossfit.DTO;
+using SistemaCrossfit.Migrations;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Request;
 
@@ -20,8 +21,8 @@ namespace SistemaCrossfit.Services
                 .Include(x => x.Student)
                 .Include(x => x.Status)
                 .FirstOrDefaultAsync(x => x.IdPayment == IdPayment);
-            
-            if (payment == null) 
+
+            if (payment == null)
             {
                 throw new Exception("Não foi encontrada a fatura");
             }
@@ -46,7 +47,7 @@ namespace SistemaCrossfit.Services
                 .Include(x => x.Status)
                 .Where(x => x.Student.IdStudent == IdStudent)
                 .ToListAsync();
-            
+
             if (payment == null)
             {
                 throw new Exception("Não foi encontradas faturas desse estudante");
@@ -67,13 +68,90 @@ namespace SistemaCrossfit.Services
             }
             return paymentsDto;
         }
+        public async Task<List<PaymentDto>> GetAll()
+        {
+            var payments = await _dbContext.Payment.ToListAsync();
+
+            var paymentsDto = new List<PaymentDto>();
+            foreach (var payment in payments)
+            {
+                var student = await _dbContext.Student.FirstOrDefaultAsync(e => e.IdStudent == payment.IdStudent);
+                var paymentDto = new PaymentDto();
+
+                if (student != null)
+                {
+                    var user = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == student.IdUser);
+                    if (user != null)
+                    {
+                        student.User = user;
+                    }
+                    paymentDto.Student = student;
+                }
+                var status = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == payment.IdStatus);
+                if (status != null)
+                {
+                    paymentDto.Status = status;
+                }
+
+                var paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(e => e.IdPaymentType == payment.IdPaymentType);
+                if (paymentType != null)
+                {
+                    paymentDto.PaymentType = paymentType;
+                }
+
+                paymentDto.IdPayment = payment.IdPayment;
+                paymentDto.DatePayment = payment.DatePayment;
+                paymentDto.DueDate = payment.DueDate;
+                paymentDto.Invoice = payment.Invoice;
+                paymentsDto.Add(paymentDto);
+            }
+            return paymentsDto;
+        }
+        public async Task<PaymentDto> GetPaymentById(int idPayment)
+        {
+            var payment = await _dbContext.Payment.FirstOrDefaultAsync(e => e.IdPayment == idPayment);
+
+            if (payment == null)
+            {
+                throw new Exception("Não foi encontradas faturas");
+            }
+            var student = await _dbContext.Student.FirstOrDefaultAsync(e => e.IdStudent == payment.IdStudent);
+            var paymentDto = new PaymentDto();
+
+            if (student != null)
+            {
+                var user = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == student.IdUser);
+                if (user != null)
+                {
+                    student.User = user;
+                }
+                paymentDto.Student = student;
+            }
+            var status = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == payment.IdStatus);
+            if (status != null)
+            {
+                paymentDto.Status = status;
+            }
+
+            var paymentType = await _dbContext.PaymentType.FirstOrDefaultAsync(e => e.IdPaymentType == payment.IdPaymentType);
+            if (paymentType != null)
+            {
+                paymentDto.PaymentType = paymentType;
+            }
+
+            paymentDto.IdPayment = payment.IdPayment;
+            paymentDto.DatePayment = payment.DatePayment;
+            paymentDto.DueDate = payment.DueDate;
+            paymentDto.Invoice = payment.Invoice;
+            return paymentDto;
+        }
         public async Task CreatePayment(CreatePaymentRequest createPaymentRequest)
         {
             var T = await _dbContext.Database.BeginTransactionAsync();
             try
             {
                 var student = await _dbContext.Student.FirstOrDefaultAsync(x => x.IdStudent == createPaymentRequest.IdStudent);
-                
+
                 if (student == null)
                 {
                     throw new Exception("Não foi encontrado o estudante");
@@ -83,8 +161,8 @@ namespace SistemaCrossfit.Services
                     .Where(x => x.IdStudent == createPaymentRequest.IdStudent)
                     .OrderByDescending(x => x.IdPayment)
                     .LastOrDefaultAsync();
-                
-                var payment = new Payment()
+
+                var payment = new Models.Payment()
                 {
                     IdAdmin = createPaymentRequest.IdAdmin == 0 ? null :
                               createPaymentRequest.IdAdmin,
