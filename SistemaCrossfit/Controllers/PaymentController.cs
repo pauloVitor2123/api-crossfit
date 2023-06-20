@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.DTO;
-using SistemaCrossfit.Repositories.Interface;
 using SistemaCrossfit.Request;
 using SistemaCrossfit.Services;
 
@@ -10,23 +9,19 @@ namespace SistemaCrossfit.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly PaymentService paymentService;
+        private readonly PaymentService _paymentService;
 
         public PaymentController(PaymentService paymentService)
         {
-            this.paymentService = paymentService;
+            _paymentService = paymentService;
         }
-        //public async Task<PaymentDto> GetOpenInvoice(int IdPayment)
-        //public async Task<List<PaymentDto>> GetPaymentByStudentId(int IdStudent)
-        //public async Task CreatePayment(CreatePaymentRequest createPaymentRequest)
-        //public async Task UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
 
         [HttpGet("invoice")]
         public async Task<ActionResult<PaymentDto>> GetOpenInvoice(int IdPayment)
         {
             try
             {
-                PaymentDto paymentDto = await paymentService.GetOpenInvoice(IdPayment);
+                PaymentDto paymentDto = await _paymentService.GetOpenInvoice(IdPayment);
                 return Ok(paymentDto);
             }
             catch (System.Exception ex)
@@ -34,12 +29,13 @@ namespace SistemaCrossfit.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
         [HttpGet("invoices-by-student")]
         public async Task<ActionResult<List<PaymentDto>>> GetPaymentByStudentId(int IdStudent)
         {
             try
             {
-                var paymentDto = await paymentService.GetPaymentByStudentId(IdStudent);
+                var paymentDto = await _paymentService.GetPaymentByStudentId(IdStudent);
                 return Ok(paymentDto);
             }
             catch (System.Exception ex)
@@ -47,25 +43,13 @@ namespace SistemaCrossfit.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
         [HttpPost]
         public async Task<ActionResult> CreatePayment(CreatePaymentRequest createPaymentRequest)
         {
             try
             {
-                await paymentService.CreatePayment(createPaymentRequest);
-                return Ok();
-            }
-            catch (System.Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpPut("update-payment")]
-        public async Task<ActionResult> UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
-        {
-            try
-            {
-                await paymentService.UpdatePayment(updatePaymentRequest);
+                await _paymentService.CreatePayment(createPaymentRequest);
                 return Ok();
             }
             catch (System.Exception ex)
@@ -74,5 +58,18 @@ namespace SistemaCrossfit.Controllers
             }
         }
 
+        [HttpPut("update-payment")]
+        public async Task<ActionResult> UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
+        {
+            try
+            {
+                await _paymentService.UpdatePayment(updatePaymentRequest);
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

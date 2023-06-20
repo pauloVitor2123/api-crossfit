@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SistemaCrossfit.Data;
 using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
+using SistemaCrossfit.Repositories;
 using SistemaCrossfit.Repositories.Interface;
 
 namespace SistemaCrossfit.Controllers
@@ -13,12 +16,16 @@ namespace SistemaCrossfit.Controllers
         private readonly IStudentRepository _studentRepository;
         private readonly IProfileRepository _profileRepository;
         private readonly IUserRepository _userRepository;
+        private readonly AppDBContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public StudentController(IStudentRepository studentRepository, IProfileRepository profileRepository, IUserRepository userRepository)
+        public StudentController(IStudentRepository studentRepository, IProfileRepository profileRepository, IUserRepository userRepository, AppDBContext dbContext, IMapper mapper)
         {
-            this._studentRepository = studentRepository;
+            _studentRepository = studentRepository;
             _profileRepository = profileRepository;
             _userRepository = userRepository;
+            _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -40,32 +47,58 @@ namespace SistemaCrossfit.Controllers
             return Ok(body);
         }
 
-        [HttpPost]
+        [HttpPost("student/checkin/{idStudent}/{idClass}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Student>> CreateStudent([FromBody] CreateStudentBody studentBody)
+        public async Task<ActionResult<Student>> CreateStudent([FromBody] CreateStudentBody studentBody, int idStudent, int idClass)
         {
-            var user = new User();
-            user.Email = studentBody.Email;
-            user.Password = studentBody.Password;
-            user.Name = studentBody.Name;
-            user.SocialName = studentBody.SocialName;
+            var user = await CreateUser(studentBody);
+            var userCreated = await _userRepository.Create(user);
+
+            var student = new Student
+            {
+                IdUser = userCreated.IdUser
+            };
+            await _studentRepository.Create(student);
+
+            var studentCheckInClassRepository = new StudentCheckInClassRepository(_dbContext);
+
+            var studentClass = new StudentCheckInClass()
+            {
+                IdStudent = idStudent,
+                IdClass = idClass
+            };
+
+            await studentCheckInClassRepository.AddAsync(studentClass);
+
+            var mappedStudentBody = _mapper.Map<CreateStudentBody>(student);
+            MapStudentData(studentBody, student);
+
+            return Ok(mappedStudentBody);
+        }
+
+        private static void MapStudentData(CreateStudentBody studentBody, Student student)
+        {
+            studentBody.IdStudent = student.IdStudent;
+            studentBody.IdAddress = student.IdAddress;
+            studentBody.IdGenre = student.IdGenre;
+            studentBody.BirthDate = student.BirthDate;
+            studentBody.IsBlocked = student.IsBlocked;
+            studentBody.BlockDescription = student.BlockDescription;
+        }
+
+        private async Task<User> CreateUser(CreateStudentBody studentBody)
+        {
+            var user = new User
+            {
+                Email = studentBody.Email,
+                Password = studentBody.Password,
+                Name = studentBody.Name,
+                SocialName = studentBody.SocialName
+            };
 
             var profile = await _profileRepository.GetByNormalizedName("STUDENT");
             user.IdProfile = profile.IdProfile;
-            var userCreated = await _userRepository.Create(user);
-
-            var student = new Student();
-            student.IdUser = userCreated.IdUser;
-            student.IdAddress = studentBody.IdAddress;
-            student.IdGenre = studentBody.IdGenre;
-            student.BirthDate = studentBody.BirthDate;
-            student.IsBlocked = studentBody.IsBlocked;
-            student.BlockDescription = studentBody.BlockDescription;
-
-            await _studentRepository.Create(student);
-
-
-            return Ok(studentBody);
+            return await _userRepository.Create(user);
         }
 
         [HttpPut("{id}")]

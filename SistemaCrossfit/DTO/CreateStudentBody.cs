@@ -7,19 +7,19 @@ namespace SistemaCrossfit.DTO
         public CreateStudentBody() { }
         public CreateStudentBody(User user, Student student)
         {
-            this.Email = user.Email;
-            this.Password = user.Password;
-            this.Name = user.Name;
-            this.SocialName = user.SocialName;
-            this.IdStudent = student.IdStudent;
-            this.IdAddress = student.IdAddress;
-            this.IdGenre = student.IdGenre;
-            this.BirthDate = student.BirthDate;
-            this.IsBlocked = student.IsBlocked;
-            this.BlockDescription = student.BlockDescription;
-            this.CreatedAt = user.CreatedAt;
-            this.UpdatedAt = user.UpdatedAt;
-            this.DeletedAt = user.DeletedAt;
+            Email = user.Email;
+            Password = user.Password;
+            Name = user.Name;
+            SocialName = user.SocialName;
+            IdStudent = student.IdStudent;
+            IdAddress = student.IdAddress;
+            IdGenre = student.IdGenre;
+            BirthDate = student.BirthDate;
+            IsBlocked = student.IsBlocked;
+            BlockDescription = student.BlockDescription;
+            CreatedAt = user.CreatedAt;
+            UpdatedAt = user.UpdatedAt;
+            DeletedAt = user.DeletedAt;
         }
         /*-------- Student Props ----------*/
         public int? IdStudent { get; set; }
