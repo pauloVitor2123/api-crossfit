@@ -1,4 +1,7 @@
-﻿using SistemaCrossfit.Factories;
+﻿using Microsoft.EntityFrameworkCore;
+using SistemaCrossfit.Factories;
+using SistemaCrossfit.Models;
+using SistemaCrossfit.Request;
 
 namespace SistemaCrossfit.Data
 {
@@ -41,12 +44,58 @@ namespace SistemaCrossfit.Data
                     Console.WriteLine("Users seeds created successfully!");
                     await context.SaveChangesAsync();
                 }
+                if (!context.PaymentType.Any())
+                {
+                    var paymentTypes = PaymentTypeFactory.CreateSeedPaymentType();
+                    await context.AddRangeAsync(paymentTypes.ToArray());
+                    Console.WriteLine("PaymentTypes seeds created successfully!");
+                }
+                if (!context.Status.Any())
+                {
+                    var status = StatusFactory.CreateSeedStatus();
+                    await context.AddRangeAsync(status.ToArray());
+                    Console.WriteLine("Status seeds created successfully!");
+                }
 
                 if (!context.Student.Any())
                 {
                     var students = StudentFactory.CreateSeedStudents();
                     await context.AddRangeAsync(students.ToArray());
                     Console.WriteLine("Students seeds created successfully!");
+                    await context.SaveChangesAsync();
+                    var T = await context.Database.BeginTransactionAsync();
+                    try
+                    {
+                        var student = await context.Student.FirstOrDefaultAsync(x => x.IdStudent == 1);
+
+                        if (student == null)
+                        {
+                            throw new Exception("Não foi encontrado o estudante");
+                        }
+                        var paymentDb = await context.Payment
+                            .Where(x => x.IdStudent == 1)
+                            .OrderByDescending(x => x.IdPayment)
+                            .LastOrDefaultAsync();
+
+                        var payment = new Payment()
+                        {
+                            IdAdmin = null,
+                            IdStudent = 1,
+                            DueDate = paymentDb == null ? DateTime.Now.AddMonths(1) : paymentDb.DueDate.AddMonths(1),
+                            IdStatus = 4,
+                            CreatedAt = DateTime.Now,
+                        };
+
+                        await context.Payment.AddAsync(payment);
+                        await context.SaveChangesAsync();
+
+                        await T.CommitAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        await T.RollbackAsync();
+                        throw new Exception(ex.Message);
+                    }
                 }
 
                 if (!context.Admin.Any())
@@ -71,18 +120,7 @@ namespace SistemaCrossfit.Data
                     await context.AddRangeAsync(exercises.ToArray());
                     Console.WriteLine("Exercises seeds created successfully!");
                 }
-                if (!context.PaymentType.Any())
-                {
-                    var paymentTypes = PaymentTypeFactory.CreateSeedPaymentType();
-                    await context.AddRangeAsync(paymentTypes.ToArray());
-                    Console.WriteLine("PaymentTypes seeds created successfully!");
-                }
-                if (!context.Status.Any())
-                {
-                    var status = StatusFactory.CreateSeedStatus();
-                    await context.AddRangeAsync(status.ToArray());
-                    Console.WriteLine("Status seeds created successfully!");
-                }
+                
                 if (!context.Exercise.Any() || !context.PaymentType.Any() || !context.Status.Any())
                 {
                     await context.SaveChangesAsync();
