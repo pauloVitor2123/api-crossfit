@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
 using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
@@ -131,6 +132,28 @@ namespace SistemaCrossfit.Controllers
         {
             int idUser = await _studentRepository.DeleteReturningIdUser(id);
             bool deleted = await _userRepository.Delete(idUser);
+            return Ok(deleted);
+        }
+
+        [HttpDelete("student/checkout/{idStudent}/{idClass}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteStudentClass(int idStudent, int idClass)
+        {
+            var student = await _studentRepository.DeleteReturningIdUser(idStudent);
+
+            var studentClass = await _dbContext.StudentCheckInClass
+                .FirstOrDefaultAsync(sc => sc.IdStudent == idStudent && sc.IdClass == idClass);
+
+            if (studentClass == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.StudentCheckInClass.Remove(studentClass);
+            await _dbContext.SaveChangesAsync();
+
+            var deleted = await _userRepository.Delete(student);
+
             return Ok(deleted);
         }
 
