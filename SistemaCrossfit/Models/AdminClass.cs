@@ -6,13 +6,13 @@ namespace SistemaCrossfit.Models
     public class AdminClass : BaseModel
     {
         [Required]
+        [Column("id_admin")]
         public int IdAdmin { get; set; }
         [Required]
+        [Column("id_class")]
         public int IdClass { get; set; }
-
-        [ForeignKey("id_admin")]
+        
         public Admin Admin { get; set;}
-        [ForeignKey("id_class")]
         public Class Class { get; set; }
     }
 }

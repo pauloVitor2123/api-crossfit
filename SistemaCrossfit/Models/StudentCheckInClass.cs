@@ -6,13 +6,13 @@ namespace SistemaCrossfit.Models
     public class StudentCheckInClass : BaseModel
     {
         [Required]
+        [Column("id_student")]
         public int IdStudent { get; set; }
         [Required]
+        [Column("id_class")]
         public int IdClass { get; set; }
 
-        [ForeignKey("id_student")]
-        public Student Admin { get; set; }
-        [ForeignKey("id_class")]
+        public Student Student { get; set; }
         public Class Class { get; set; }
     }
 }

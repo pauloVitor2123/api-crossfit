@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaCrossfit.Data;
 
@@ -11,9 +12,10 @@ using SistemaCrossfit.Data;
 namespace SistemaCrossfit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230621015921_UpdateNaTabelaDeStudentCheckInClass")]
+    partial class UpdateNaTabelaDeStudentCheckInClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,6 +149,14 @@ namespace SistemaCrossfit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at")
                         .HasColumnOrder(2147483645);
+
+                    b.Property<int>("id_admin")
+                        .HasColumnType("int")
+                        .HasColumnName("id_admin1");
+
+                    b.Property<int>("id_class")
+                        .HasColumnType("int")
+                        .HasColumnName("id_class1");
 
                     b.HasKey("IdAdmin", "IdClass");
 
@@ -833,7 +843,7 @@ namespace SistemaCrossfit.Migrations
                     b.HasOne("SistemaCrossfit.Models.Admin", "Admin")
                         .WithMany()
                         .HasForeignKey("IdAdmin")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SistemaCrossfit.Models.Class", "Class")

@@ -8,10 +8,12 @@ namespace SistemaCrossfit.Services
     public class PaymentService
     {
         private readonly AppDBContext _dbContext;
+
         public PaymentService(AppDBContext appDbContext)
         {
             _dbContext = appDbContext;
         }
+
         public async Task<PaymentDto> GetOpenInvoice(int IdPayment)
         {
             var payment = await _dbContext.Payment
@@ -37,6 +39,7 @@ namespace SistemaCrossfit.Services
             };
             return paymentDto;
         }
+
         public async Task<List<PaymentDto>> GetPaymentByStudentId(int IdStudent)
         {
             var payment = await _dbContext.Payment
@@ -66,6 +69,7 @@ namespace SistemaCrossfit.Services
             }
             return paymentsDto;
         }
+
         public async Task<List<PaymentDto>> GetAll()
         {
             var payments = await _dbContext.Payment.ToListAsync();
@@ -105,6 +109,7 @@ namespace SistemaCrossfit.Services
             }
             return paymentsDto;
         }
+
         public async Task<PaymentDto> GetPaymentById(int idPayment)
         {
             var payment = await _dbContext.Payment.FirstOrDefaultAsync(e => e.IdPayment == idPayment);
@@ -143,6 +148,7 @@ namespace SistemaCrossfit.Services
             paymentDto.Invoice = payment.Invoice;
             return paymentDto;
         }
+
         public async Task CreatePayment(CreatePaymentRequest createPaymentRequest)
         {
             var T = await _dbContext.Database.BeginTransactionAsync();
@@ -181,6 +187,7 @@ namespace SistemaCrossfit.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public async Task UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
         {
             var T = await _dbContext.Database.BeginTransactionAsync();

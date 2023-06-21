@@ -9,11 +9,9 @@ namespace SistemaCrossfit.Data.Map
         public override void Configure(EntityTypeBuilder<StudentCheckInClass> builder)
         {
             builder.HasKey(sc => new { sc.IdStudent, sc.IdClass });
-            builder.Property(sc => sc.IdStudent).IsRequired().HasColumnName("id_student");
-            builder.Property(sc => sc.IdClass).IsRequired().HasColumnName("id_class");
 
-            builder.HasOne(sc => sc.Admin)
-                .WithMany().HasForeignKey(sc => sc.IdStudent);
+            builder.HasOne(sc => sc.Student)
+                .WithMany().HasForeignKey(sc => sc.IdStudent).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(sc => sc.Class)
                 .WithMany().HasForeignKey(sc => sc.IdClass).OnDelete(DeleteBehavior.Restrict);
 
