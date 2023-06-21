@@ -14,10 +14,10 @@ namespace SistemaCrossfit.Models
         public string Description { get; set; }
         [ForeignKey("Professor")]
         public int IdProfessor { get; set; }
-        public virtual Professor Professor { get; set; }
+        public virtual Professor? Professor { get; set; }
 
         [ForeignKey("Status")]
         public int IdStatus { get; set; }
-        public virtual Status Status { get; set; }
+        public virtual Status? Status { get; set; }
     }
 }

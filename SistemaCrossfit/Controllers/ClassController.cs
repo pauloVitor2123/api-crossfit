@@ -28,7 +28,7 @@ namespace SistemaCrossfit.Controllers
             return Ok(classes);
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("search/{name}")]
         [AllowAnonymous]
         public async Task<ActionResult<Class>> GetClassById(string name)
         {
@@ -44,7 +44,8 @@ namespace SistemaCrossfit.Controllers
             return Ok(c);
         }
 
-        [HttpPost]
+        [HttpPost("{idAdmin}")]
+        [Authorize]
         public async Task<ActionResult<Class>> CreateClass([FromBody] Class classCreate, int idAdmin)
         {
             var c = await _classRespository.Create(classCreate);
@@ -54,7 +55,7 @@ namespace SistemaCrossfit.Controllers
 
             var adminClass = new AdminClass
             {
-                IdAdmin = idAdmin,
+                IdAdmin = idAdmin,  
                 IdClass = idClass
             };
 
@@ -64,6 +65,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<Class>> UpdateClass(int id, [FromBody] Class classes)
         {
             var classUpdate = await _classRespository.Update(classes, id);
@@ -71,6 +73,7 @@ namespace SistemaCrossfit.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Class>> DeleteClassById(int id)
         {
             var deleted = await _classRespository.Delete(id);

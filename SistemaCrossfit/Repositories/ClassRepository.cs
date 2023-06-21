@@ -17,10 +17,6 @@ namespace SistemaCrossfit.Repositories
         public async Task<List<Class>> GetAll()
         {
             var classes = await _dbContext.Class.ToListAsync();
-            if (classes.Any())
-            {
-                return new List<Class>();
-            }
 
             foreach (var item in classes)
             {
@@ -28,6 +24,11 @@ namespace SistemaCrossfit.Repositories
                 if (p == null) throw new Exception("Professor not found!");
 
                 item.Professor = p;
+
+                User u = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == p.IdUser);
+                if (u == null) throw new Exception("User not found!");
+
+                item.Professor.User = u;
 
                 Status s = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == item.IdStatus);
                 if (s == null) throw new Exception("Status not found!");
@@ -49,11 +50,17 @@ namespace SistemaCrossfit.Repositories
         public async Task<Class> GetById(int id)
         {
             var classVariable = await _dbContext.Class.FirstOrDefaultAsync(c => c.IdClass == id);
+            if (classVariable == null) throw new Exception("Class not found!");
 
             Professor p = await _dbContext.Professor.FirstOrDefaultAsync(e => e.IdProfessor == classVariable.IdProfessor);
             if (p == null) throw new Exception("Professor not found!");
 
             classVariable.Professor = p;
+
+            User u = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == p.IdUser);
+            if (u == null) throw new Exception("User not found!");
+
+            classVariable.Professor.User = u;
 
             Status s = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == classVariable.IdStatus);
             if (s == null) throw new Exception("Status not found!");
