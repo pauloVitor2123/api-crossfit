@@ -367,3 +367,5 @@ appsettings.json
 
 # Hide VS Code files
 .vscode/*
+
+.vs/*
