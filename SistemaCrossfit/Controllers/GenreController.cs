@@ -15,6 +15,7 @@ namespace SistemaCrossfit.Controllers
         {
             this._genderRepository = GenderRepository;
         }
+
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<List<Gender>>> GetGenders()
@@ -33,9 +34,10 @@ namespace SistemaCrossfit.Controllers
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ActionResult<Gender>> CreateGender([FromBody] Gender Gender)
+        public async Task<ActionResult<Gender>> CreateGender([FromBody] Gender gender)
         {
-            Gender g = await _genderRepository.Create(Gender);
+            gender.NormalizedName = gender.Name.ToUpper();
+            Gender g = await _genderRepository.Create(gender);
             return Ok(g);
         }
 
@@ -43,6 +45,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Gender>> UpdatedGender(int id, [FromBody] Gender gender)
         {
+            gender.NormalizedName = gender.Name.ToUpper();
             Gender g = await _genderRepository.Update(gender, id);
             return Ok(g);
         }
