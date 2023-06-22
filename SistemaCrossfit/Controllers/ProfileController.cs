@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
+using System.Reflection;
 
 namespace SistemaCrossfit.Controllers
 {
@@ -35,6 +36,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Profile>> CreateProfile([FromBody] Profile profile)
         {
+            profile.NormalizedName = profile.Name.ToUpper();
             Profile p = await _profileRepository.Create(profile);
             return Ok(p);
         }
@@ -43,6 +45,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Profile>> UpdatedProfile(int id, [FromBody] Profile profile)
         {
+            profile.NormalizedName = profile.Name.ToUpper();
             Profile p = await _profileRepository.Update(profile, id);
             return Ok(p);
         }

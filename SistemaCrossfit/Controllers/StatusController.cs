@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
 using System.Data;
+using System.Reflection;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -39,6 +40,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Status>> CreateStatus([FromBody] Status status)
         {
+            status.NormalizedName = status.Name.ToUpper();
             Status s = await _statusRepository.Create(status);
             return Ok(s);
         }
@@ -47,6 +49,7 @@ namespace SistemaCrossfit.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Status>> UpdateStatus(int id, [FromBody] Status status)
         {
+            status.NormalizedName = status.Name.ToUpper();
             Status s = await _statusRepository.Update(status, id);
             return Ok(s);
         }

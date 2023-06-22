@@ -9,7 +9,7 @@ namespace SistemaCrossfit.Models
         [Column("id_status")]
         public int IdStatus { get; set; }
         public string Name { get; set; }
-        public string NormalizedName { get; set; }
+        public string? NormalizedName { get; set; }
         public bool Active { get; set; }
     }
 }
