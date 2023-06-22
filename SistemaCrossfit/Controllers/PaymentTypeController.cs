@@ -61,7 +61,7 @@ namespace SistemaCrossfit.Controllers
             }
 		}
 
-		[HttpPut]
+		[HttpPut("{id}")]
 		[Authorize(Roles = "ADMIN")]
 		public async Task<ActionResult<PaymentType>> UpdatePaymentType(int id, [FromBody] PaymentType paymentType)
 		{
