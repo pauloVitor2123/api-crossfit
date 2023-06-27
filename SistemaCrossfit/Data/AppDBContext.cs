@@ -52,8 +52,8 @@ namespace SistemaCrossfit.Data
             foreach (var entry in ChangeTracker.Entries())
             {
                 var entity = entry.Entity;
-
-                if (entry.State == EntityState.Deleted)
+                var deletedAtProperty = entity.GetType().GetProperty("DeletedAt");
+                if (entry.State == EntityState.Deleted && deletedAtProperty != null)
                 {
                     entry.State = EntityState.Modified;
                     entity.GetType().GetProperty("DeletedAt")?.SetValue(entity, DateTime.Now);
