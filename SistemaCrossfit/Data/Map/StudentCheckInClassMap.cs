@@ -4,9 +4,9 @@ using SistemaCrossfit.Models;
 
 namespace SistemaCrossfit.Data.Map
 {
-    public class StudentCheckInClassMap : BaseMap<StudentCheckInClass>
+    public class StudentCheckInClassMap : IEntityTypeConfiguration<StudentCheckInClass>
     {
-        public override void Configure(EntityTypeBuilder<StudentCheckInClass> builder)
+        public virtual void Configure(EntityTypeBuilder<StudentCheckInClass> builder)
         {
             builder.HasKey(sc => new { sc.IdStudent, sc.IdClass });
 
@@ -15,7 +15,6 @@ namespace SistemaCrossfit.Data.Map
             builder.HasOne(sc => sc.Class)
                 .WithMany().HasForeignKey(sc => sc.IdClass).OnDelete(DeleteBehavior.Restrict);
 
-            base.Configure(builder);
         }
     }
 }

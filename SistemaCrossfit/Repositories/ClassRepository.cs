@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaCrossfit.Data;
+using SistemaCrossfit.DTO;
 using SistemaCrossfit.Models;
 using SistemaCrossfit.Repositories.Interface;
 
@@ -17,27 +18,74 @@ namespace SistemaCrossfit.Repositories
         public async Task<List<Class>> GetAll()
         {
             var classes = await _dbContext.Class.ToListAsync();
-
             foreach (var item in classes)
             {
-                Professor p = await _dbContext.Professor.FirstOrDefaultAsync(e => e.IdProfessor == item.IdProfessor);
+                var p = await _dbContext.Professor.FirstOrDefaultAsync(e => e.IdProfessor == item.IdProfessor);
                 if (p == null) throw new Exception("Professor not found!");
 
                 item.Professor = p;
 
-                User u = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == p.IdUser);
+                var u = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == p.IdUser);
                 if (u == null) throw new Exception("User not found!");
 
                 item.Professor.User = u;
 
-                Status s = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == item.IdStatus);
+                var s = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == item.IdStatus);
                 if (s == null) throw new Exception("Status not found!");
 
                 item.Status = s;
 
+
             }
 
             return classes;
+        }
+
+        public async Task<List<ClassDTO>> GetAllClassesWithStudentInfo(int idStudent)
+        {
+            var classes = await _dbContext.Class.ToListAsync();
+            List<ClassDTO> classList = new List<ClassDTO>();
+
+            foreach (var item in classes)
+            {
+                var p = await _dbContext.Professor.FirstOrDefaultAsync(e => e.IdProfessor == item.IdProfessor);
+                if (p == null)
+                    throw new Exception("Professor not found!");
+
+                item.Professor = p;
+
+                var u = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == p.IdUser);
+                if (u == null)
+                    throw new Exception("User not found!");
+
+                item.Professor.User = u;
+
+                var s = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == item.IdStatus);
+                if (s == null)
+                    throw new Exception("Status not found!");
+
+                item.Status = s;
+
+                var checkinInClass = await _dbContext.StudentCheckInClass.FirstOrDefaultAsync(x => x.IdClass == item.IdClass && x.IdStudent == idStudent);
+                var classDto = new ClassDTO
+                {
+                    IdClass = item.IdClass,
+                    Name = item.Name,
+                    Date = item.Date,
+                    StartHour = item.StartHour,
+                    EndHour = item.EndHour,
+                    Description = item.Description,
+                    IdProfessor = item.IdProfessor,
+                    Professor = item.Professor,
+                    IdStatus = item.IdStatus,
+                    Status = item.Status,
+                    checkin = checkinInClass != null
+                };
+
+                classList.Add(classDto);
+            }
+
+            return classList;
         }
 
         public async Task<Class> GetByName(string name)

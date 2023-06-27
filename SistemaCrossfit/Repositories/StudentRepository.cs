@@ -35,9 +35,49 @@ namespace SistemaCrossfit.Repositories
             return studentsList;
         }
 
+        public async Task<List<StudentNonPayingDTO>> GetAllNonPaying()
+        {
+            UserRepository userRepository = new UserRepository(_dbContext);
+            List<Student> students = await _dbContext.Student.ToListAsync();
+            List<StudentNonPayingDTO> studentsList = new List<StudentNonPayingDTO>();
+
+            foreach (var student in students)
+            {
+                User user = await userRepository.GetById(student.IdUser);
+                var payment = await _dbContext.Payment
+                            .Where(x => x.IdStudent == student.IdStudent)
+                            .OrderByDescending(x => x.IdPayment)
+                            .LastOrDefaultAsync();
+                if (payment == null)
+                {
+                    throw new Exception("Payment not found!");
+                }
+                var status = await _dbContext.Status.FirstOrDefaultAsync(s => s.IdStatus == payment.IdStatus);
+                if (status == null)
+                {
+                    throw new Exception("Status not found!");
+                }
+                payment.Status = status;
+                StudentNonPayingDTO studentNonPaying = new StudentNonPayingDTO(user, student, payment);
+
+                studentNonPaying.Status = new StatusDTO(status);
+                student.IdUser = user.IdUser;
+                studentsList.Add(studentNonPaying);
+            }
+
+            List<StudentNonPayingDTO> nonPayingStudents = new List<StudentNonPayingDTO>();
+
+            foreach (var student in studentsList.Where(s => s.Status.NormalizedName.ToUpper() == "PENDENT" && s.DatePayment == null && DateTime.Now > s.DueDate))
+            {
+                nonPayingStudents.Add(student);
+            }
+
+            return nonPayingStudents;
+        }
+
         public async Task<Student> GetById(int id)
         {
-            Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdStudent == id);
+            var student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdStudent == id);
             if (student == null)
             {
                 throw new Exception("Student not found!");
@@ -62,7 +102,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<Student> Update(Student student, int id)
         {
-            Student studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
+            var studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
             if (studentUpdated == null)
             {
                 throw new Exception("Student not found!");
@@ -78,7 +118,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<int> DeleteReturningIdUser(int id)
         {
-            Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdStudent == id);
+            var student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdStudent == id);
             if (student == null)
             {
                 throw new Exception("Student not found!");
@@ -94,7 +134,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<bool> Block(int id, string? description = "")
         {
-            Student studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
+            var studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
             if (studentUpdated == null)
             {
                 throw new Exception("Student not found!");
@@ -110,7 +150,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<bool> Unblock(int id)
         {
-            Student studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
+            var studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == id);
             if (studentUpdated == null)
             {
                 throw new Exception("Student not found!");
@@ -126,7 +166,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<Student> ConnectAddressWithStudent(int idStudent, int idAddress)
         {
-            Student studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == idStudent);
+            var studentUpdated = await _dbContext.Student.FirstOrDefaultAsync(s => s.IdStudent == idStudent);
             if (studentUpdated == null)
             {
                 throw new HttpRequestException("Student not found!", null, HttpStatusCode.NotFound);

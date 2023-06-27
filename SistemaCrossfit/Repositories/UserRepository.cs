@@ -22,7 +22,12 @@ namespace SistemaCrossfit.Repositories
 
             foreach (var user in users)
             {
-                user.Profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
+                var profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
+                if (profile == null)
+                {
+                    throw new Exception("Profile not found!");
+                }
+                user.Profile = profile;
             }
             return users;
         }
@@ -37,7 +42,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<User> Update(User user)
         {
-            User userUpdated = await _dbContext.User.FirstOrDefaultAsync(u => u.IdUser == user.IdUser);
+            var userUpdated = await _dbContext.User.FirstOrDefaultAsync(u => u.IdUser == user.IdUser);
 
             if (userUpdated == null)
             {
@@ -60,7 +65,7 @@ namespace SistemaCrossfit.Repositories
         private async Task deleteAdminByIdUser(int IdUser)
         {
             AdminRepository adminRepository = new AdminRepository(_dbContext);
-            Admin admin = await _dbContext.Admin.FirstOrDefaultAsync(admin => admin.IdUser == IdUser);
+            var admin = await _dbContext.Admin.FirstOrDefaultAsync(admin => admin.IdUser == IdUser);
             if (admin == null)
             {
                 throw new Exception("Admin not found!");
@@ -71,7 +76,7 @@ namespace SistemaCrossfit.Repositories
         {
             PaymentService paymentService = new PaymentService(_dbContext);
             StudentRepository studentRepository = new StudentRepository(_dbContext, paymentService);
-            Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == IdUser);
+            var student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == IdUser);
             if (student == null)
             {
                 throw new Exception("Student not found!");
@@ -82,7 +87,7 @@ namespace SistemaCrossfit.Repositories
         private async Task deleteProfessorByIdUser(int IdUser)
         {
             ProfessorRepository professorRepository = new ProfessorRepository(_dbContext);
-            Professor professor = await _dbContext.Professor.FirstOrDefaultAsync(professor => professor.IdUser == IdUser);
+            var professor = await _dbContext.Professor.FirstOrDefaultAsync(professor => professor.IdUser == IdUser);
             if (professor == null)
             {
                 throw new Exception("Professor not found!");
@@ -92,14 +97,14 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<bool> Delete(int id)
         {
-            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == id);
+            var user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == id);
             if (user == null)
             {
                 throw new Exception("User not found!");
             }
 
 
-            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
+            var profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
             if (profile == null)
             {
                 throw new Exception("Profile not found!");
@@ -127,7 +132,7 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<User> GetById(int id)
         {
-            User user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == id);
+            var user = await _dbContext.User.FirstOrDefaultAsync(user => user.IdUser == id);
             if (user == null)
             {
                 throw new Exception("User not found!");
@@ -136,7 +141,7 @@ namespace SistemaCrossfit.Repositories
         }
         public async Task<Professor> GetProfessorByIdUser(int idUser)
         {
-            Professor professor = await _dbContext.Professor.FirstOrDefaultAsync(professor => professor.IdUser == idUser);
+            var professor = await _dbContext.Professor.FirstOrDefaultAsync(professor => professor.IdUser == idUser);
             if (professor == null)
             {
                 throw new Exception("Professor not found!");
@@ -145,7 +150,7 @@ namespace SistemaCrossfit.Repositories
         }
         public async Task<Admin> GetAdminByIdUser(int idUser)
         {
-            Admin admin = await _dbContext.Admin.FirstOrDefaultAsync(admin => admin.IdUser == idUser);
+            var admin = await _dbContext.Admin.FirstOrDefaultAsync(admin => admin.IdUser == idUser);
             if (admin == null)
             {
                 throw new Exception("Admin not found!");
@@ -154,7 +159,7 @@ namespace SistemaCrossfit.Repositories
         }
         public async Task<Student> GetStudentByIdUser(int idUser)
         {
-            Student student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == idUser);
+            var student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == idUser);
             if (student == null)
             {
                 throw new Exception("Student not found!");
@@ -165,16 +170,47 @@ namespace SistemaCrossfit.Repositories
 
         public async Task<dynamic> Login(LoginBody login)
         {
-            User user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == login.Email && u.Password == login.Password);
+            var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == login.Email && u.Password == login.Password);
             if (user == null)
             {
                 throw new Exception("Email or password not found!");
             }
 
-            Profile profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
+            var profile = await _dbContext.Profile.FirstOrDefaultAsync(profile => profile.IdProfile == user.IdProfile);
             if (profile == null)
             {
-                throw new Exception("profile not found!");
+                throw new Exception("Profile not found!");
+            }
+
+
+            var student = await _dbContext.Student.FirstOrDefaultAsync(student => student.IdUser == user.IdUser);
+            if (student != null)
+            {
+
+                var payment = await _dbContext.Payment
+                                .Where(x => x.IdStudent == student.IdStudent)
+                                .OrderByDescending(x => x.IdPayment)
+                                .LastOrDefaultAsync();
+                if (payment == null)
+                {
+                    throw new Exception("Payment not found!");
+                }
+
+                var status = await _dbContext.Status.FirstOrDefaultAsync(s => s.IdStatus == payment.IdStatus);
+                if (status == null)
+                {
+                    throw new Exception("Status not found!");
+                }
+
+
+                if (status.NormalizedName == "PENDENT" && payment.DatePayment == null && DateTime.Now > payment.DueDate)
+                {
+                    PaymentService paymentService = new PaymentService(_dbContext);
+                    StudentRepository studentRepository = new StudentRepository(_dbContext, paymentService);
+
+                    await studentRepository.Block(student.IdStudent, "Você possui uma fatura em aberto que precisa ser quitada.");
+                }
+
             }
 
             var token = TokenService.GenerateToken(user, profile);

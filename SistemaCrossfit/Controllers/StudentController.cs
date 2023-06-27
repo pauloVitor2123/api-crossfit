@@ -37,6 +37,14 @@ namespace SistemaCrossfit.Controllers
             return Ok(students);
         }
 
+        [HttpGet("non-paying")]
+        [Authorize]
+        public async Task<ActionResult<List<StudentNonPayingDTO>>> GetNonPayingStudents()
+        {
+            var students = await _studentRepository.GetAllNonPaying();
+            return Ok(students);
+        }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<Student>> GetStudentById(int id)
@@ -142,8 +150,8 @@ namespace SistemaCrossfit.Controllers
                 return NotFound();
             }
 
-            _dbContext.StudentCheckInClass.Remove(studentClass);
-            await _dbContext.SaveChangesAsync();
+            StudentCheckInClassRepository studentCheckInClassRepository = new StudentCheckInClassRepository(_dbContext);
+            await studentCheckInClassRepository.Remove(studentClass);
 
             return Ok(true);
         }
@@ -152,7 +160,6 @@ namespace SistemaCrossfit.Controllers
         public async Task<ActionResult> Checkin(int idStudent, int idClass)
         {
 
-            StudentCheckInClassRepository studentCheckInClassRepository = new StudentCheckInClassRepository(_dbContext);
 
             var studentClass = new StudentCheckInClass()
             {
@@ -160,8 +167,8 @@ namespace SistemaCrossfit.Controllers
                 IdClass = idClass
             };
 
+            StudentCheckInClassRepository studentCheckInClassRepository = new StudentCheckInClassRepository(_dbContext);
             await studentCheckInClassRepository.AddAsync(studentClass);
-            await _dbContext.SaveChangesAsync();
 
             return Ok(true);
         }
