@@ -37,6 +37,14 @@ namespace SistemaCrossfit.Controllers
             return Ok(students);
         }
 
+        [HttpGet("non-paying")]
+        [Authorize]
+        public async Task<ActionResult<List<StudentNonPayingDTO>>> GetNonPayingStudents()
+        {
+            var students = await _studentRepository.GetAllNonPaying();
+            return Ok(students);
+        }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<Student>> GetStudentById(int id)
@@ -48,43 +56,37 @@ namespace SistemaCrossfit.Controllers
             return Ok(body);
         }
 
-        [HttpPost("student/checkin/{idStudent}/{idClass}")]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<Student>> CreateStudent([FromBody] CreateStudentBody studentBody, int idStudent, int idClass)
+        public async Task<ActionResult<Student>> CreateStudent([FromBody] CreateStudentBody studentBody)
         {
             var user = await CreateUser(studentBody);
-            var userCreated = await _userRepository.Create(user);
 
             var student = new Student
             {
-                IdUser = userCreated.IdUser
+                IdUser = user.IdUser,
+                IdAddress = studentBody.IdAddress,
+                IdGender = studentBody.IdGender,
+                BirthDate = studentBody.BirthDate,
+                IsBlocked = studentBody.IsBlocked,
+                BlockDescription = studentBody.BlockDescription,
             };
+
+            /*var mappedStudentBody = _mapper.Map<CreateStudentBody>(student);
+            MapStudentData(studentBody, student);*/
+
             await _studentRepository.Create(student);
 
-            var studentCheckInClassRepository = new StudentCheckInClassRepository(_dbContext);
-
-            var studentClass = new StudentCheckInClass()
-            {
-                IdStudent = idStudent,
-                IdClass = idClass
-            };
-
-            await studentCheckInClassRepository.AddAsync(studentClass);
-
-            var mappedStudentBody = _mapper.Map<CreateStudentBody>(student);
-            MapStudentData(studentBody, student);
-
-            return Ok(mappedStudentBody);
+            return Ok(student);
         }
 
         private static void MapStudentData(CreateStudentBody studentBody, Student student)
         {
-            studentBody.IdStudent = student.IdStudent;
-            studentBody.IdAddress = student.IdAddress;
-            studentBody.IdGender = student.IdGender;
-            studentBody.BirthDate = student.BirthDate;
-            studentBody.IsBlocked = student.IsBlocked;
-            studentBody.BlockDescription = student.BlockDescription;
+            student.IdAddress = studentBody.IdAddress;
+            student.IdGender = studentBody.IdGender;
+            student.BirthDate = studentBody.BirthDate;
+            student.IsBlocked = studentBody.IsBlocked;
+            student.BlockDescription = studentBody.BlockDescription;
         }
 
         private async Task<User> CreateUser(CreateStudentBody studentBody)
@@ -135,12 +137,10 @@ namespace SistemaCrossfit.Controllers
             return Ok(deleted);
         }
 
-        [HttpDelete("student/checkout/{idStudent}/{idClass}")]
+        [HttpDelete("checkout/{idStudent}/{idClass}")]
         [Authorize]
-        public async Task<ActionResult> DeleteStudentClass(int idStudent, int idClass)
+        public async Task<ActionResult> Checkout(int idStudent, int idClass)
         {
-            var student = await _studentRepository.DeleteReturningIdUser(idStudent);
-
             var studentClass = await _dbContext.StudentCheckInClass
                 .FirstOrDefaultAsync(sc => sc.IdStudent == idStudent && sc.IdClass == idClass);
 
@@ -149,19 +149,32 @@ namespace SistemaCrossfit.Controllers
                 return NotFound();
             }
 
-            _dbContext.StudentCheckInClass.Remove(studentClass);
-            await _dbContext.SaveChangesAsync();
+            StudentCheckInClassRepository studentCheckInClassRepository = new StudentCheckInClassRepository(_dbContext);
+            await studentCheckInClassRepository.Remove(studentClass);
 
-            var deleted = await _userRepository.Delete(student);
+            return Ok(true);
+        }
 
-            return Ok(deleted);
+        [HttpPost("checkin/{idStudent}/{idClass}")]
+        [Authorize]
+        public async Task<ActionResult> Checkin(int idStudent, int idClass)
+        {
+            var studentClass = new StudentCheckInClass()
+            {
+                IdStudent = idStudent,
+                IdClass = idClass
+            };
+
+            StudentCheckInClassRepository studentCheckInClassRepository = new StudentCheckInClassRepository(_dbContext);
+            await studentCheckInClassRepository.AddAsync(studentClass);
+
+            return Ok(true);
         }
 
         public class BlockRequest
         {
             public string BlockDescription { get; set; }
         }
-
 
         [HttpPatch("block/{id}")]
         [Authorize]

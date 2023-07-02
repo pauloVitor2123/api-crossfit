@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SistemaCrossfit.Models
 {
-    public class StudentCheckInClass : BaseModel
+    public class StudentCheckInClass
     {
         [Required]
         [Column("id_student")]

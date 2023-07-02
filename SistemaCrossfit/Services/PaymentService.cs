@@ -216,11 +216,15 @@ namespace SistemaCrossfit.Services
 
                 await T.CommitAsync();
 
-                await CreatePayment(new CreatePaymentRequest()
+                if (await _dbContext.Payment.FirstOrDefaultAsync(x => x.IdStudent == payment.IdStudent && x.DueDate > payment.DueDate) == null)
                 {
-                    IdAdmin = updatePaymentRequest.IdAdmin,
-                    IdStudent = payment.IdStudent
-                });
+                    await CreatePayment(new CreatePaymentRequest()
+                    {
+                        IdAdmin = updatePaymentRequest.IdAdmin,
+                        IdStudent = payment.IdStudent
+                    });
+                }
+
 
             }
             catch (Exception ex)

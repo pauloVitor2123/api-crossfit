@@ -22,10 +22,22 @@ namespace SistemaCrossfit.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Class>>> GetClasses()
+        public async Task<ActionResult<List<Class>>> GetClasses(int? idStudent)
         {
-            var classes = await _classRespository.GetAll();
-            return Ok(classes);
+            if (!idStudent.HasValue)
+            {
+                var classes = await _classRespository.GetAll();
+                return Ok(classes);
+            }
+            var classesWithStudentInfo = await _classRespository.GetAllClassesWithStudentInfo(idStudent.Value);
+            return Ok(classesWithStudentInfo);
+        }
+        [HttpGet("student-home/{idStudent}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<Class>>> GetClassesWithStudentInfo(int idStudent)
+        {
+            var classesWithStudentInfo = await _classRespository.GetAllClassesWithStudentInfo(idStudent);
+            return Ok(classesWithStudentInfo);
         }
 
         [HttpGet("search/{name}")]
@@ -55,7 +67,7 @@ namespace SistemaCrossfit.Controllers
 
             var adminClass = new AdminClass
             {
-                IdAdmin = idAdmin,  
+                IdAdmin = idAdmin,
                 IdClass = idClass
             };
 

@@ -14,8 +14,15 @@ namespace SistemaCrossfit.Repositories
 
         public async Task AddAsync(StudentCheckInClass studentCheckInClass)
         {
-            _dbContext.StudentCheckInClass.Add(studentCheckInClass);
+            await _dbContext.StudentCheckInClass.AddAsync(studentCheckInClass);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task Remove(StudentCheckInClass studentCheckInClass)
+        {
+            _dbContext.StudentCheckInClass.Remove(studentCheckInClass);
+            await _dbContext.SaveChangesAsync();
+        }
+
     }
 }

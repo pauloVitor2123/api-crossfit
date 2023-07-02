@@ -13,6 +13,7 @@ namespace SistemaCrossfit.Repositories.Interface
         Task<Boolean> Block(int id, string? description);
         Task<Boolean> Unblock(int id);
         Task<Student> ConnectAddressWithStudent(int idStudent, int idAddress);
+        Task<List<StudentNonPayingDTO>> GetAllNonPaying();
 
     }
 }
