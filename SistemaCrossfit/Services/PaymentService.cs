@@ -166,12 +166,23 @@ namespace SistemaCrossfit.Services
                     .OrderByDescending(x => x.IdPayment)
                     .LastOrDefaultAsync();
 
+                var nextDueDate = DateTime.Now.AddMonths(1);
+
+                if (paymentDb != null)
+                {
+                    var lastDueDatePlusOneMonth = paymentDb.DueDate.AddMonths(1);
+                    if (lastDueDatePlusOneMonth > nextDueDate)
+                    {
+                        nextDueDate = lastDueDatePlusOneMonth;
+                    }
+                }
+
                 var payment = new Models.Payment()
                 {
                     IdAdmin = createPaymentRequest.IdAdmin == 0 ? null :
                               createPaymentRequest.IdAdmin,
                     IdStudent = createPaymentRequest.IdStudent,
-                    DueDate = paymentDb == null ? DateTime.Now.AddMonths(1) : paymentDb.DueDate.AddMonths(1),
+                    DueDate = nextDueDate,
                     IdStatus = 4,
                     CreatedAt = DateTime.Now,
                 };
@@ -187,6 +198,7 @@ namespace SistemaCrossfit.Services
                 throw new Exception(ex.Message);
             }
         }
+
 
         public async Task UpdatePayment(UpdatePaymentRequest updatePaymentRequest)
         {
