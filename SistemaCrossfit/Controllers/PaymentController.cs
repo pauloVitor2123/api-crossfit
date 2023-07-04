@@ -32,7 +32,7 @@ namespace SistemaCrossfit.Controllers
             }
         }
 
-        [HttpGet("invoices-by-student")]
+        [HttpGet("invoices-by-student/{idStudent}")]
         [Authorize]
         public async Task<ActionResult<List<PaymentDto>>> GetPaymentByStudentId(int IdStudent)
         {
