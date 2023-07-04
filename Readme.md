@@ -4,6 +4,8 @@ Microsoft SQL Server
 Visual Studio e/ou Visual Studio Code
 
 
+Passo a passo da instalação
+
 1. Clonar o projeto: https://github.com/pauloVitor2123/api-crossfit
 2. Criar o arquivo appsettings.json de acordo 
 {
