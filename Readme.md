@@ -1,13 +1,13 @@
-Requisitos
+## Requisitos do projeto?
 
-1. Microsoft SQL Server
-2. Visual Studio e/ou Visual Studio Code
+- Microsoft SQL Server
+- Visual Studio 2022
 
 
-Passo a passo da instalação
+## Passo a passo da instalação
 
 1. Clonar o projeto: https://github.com/pauloVitor2123/api-crossfit
-2. Criar o arquivo appsettings.json de acordo 
+2. Criar o arquivo `appsettings.json` de acordo 
 {
   "Logging": {
     "LogLevel": {
@@ -21,7 +21,7 @@ Passo a passo da instalação
   "AllowedHosts": "*"
 }
 
-3. Rodar no terminal o comando "Update-Database"
+3. Rodar no terminal o comando `Update-Database`
 4. Rodar a solução.
 
 Alguns comandos do EF:
