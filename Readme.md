@@ -22,8 +22,7 @@ Passo a passo da instalação
 }
 
 3. Rodar no terminal o comando "Update-Database"
-
-4.Rodar a solução.
+4. Rodar a solução.
 
 Alguns comandos do EF:
 Add migration - Add-Migration initialDB -Context AppDBContext - Update-Database -Context AppDBContext
