@@ -48,7 +48,7 @@ namespace SistemaCrossfit.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "ADMIN")]
+		[Authorize]
 		public async Task<ActionResult<StudentPoints>> CreateStudentPoints([FromBody] StudentPointsRequest requestBody)
 		{
 			try

@@ -141,7 +141,6 @@ namespace SistemaCrossfit.Controllers
         [Authorize]
         public async Task<ActionResult> Checkout(int idStudent, int idClass)
         {
-
             var studentClass = await _dbContext.StudentCheckInClass
                 .FirstOrDefaultAsync(sc => sc.IdStudent == idStudent && sc.IdClass == idClass);
 
@@ -155,12 +154,11 @@ namespace SistemaCrossfit.Controllers
 
             return Ok(true);
         }
+
         [HttpPost("checkin/{idStudent}/{idClass}")]
         [Authorize]
         public async Task<ActionResult> Checkin(int idStudent, int idClass)
         {
-
-
             var studentClass = new StudentCheckInClass()
             {
                 IdStudent = idStudent,
@@ -177,7 +175,6 @@ namespace SistemaCrossfit.Controllers
         {
             public string BlockDescription { get; set; }
         }
-
 
         [HttpPatch("block/{id}")]
         [Authorize]
