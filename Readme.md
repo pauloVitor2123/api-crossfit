@@ -1,7 +1,7 @@
 Requisitos
 
-Microsoft SQL Server
-Visual Studio e/ou Visual Studio Code
+1. Microsoft SQL Server
+2. Visual Studio e/ou Visual Studio Code
 
 
 Passo a passo da instalação
