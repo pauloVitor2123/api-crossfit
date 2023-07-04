@@ -32,6 +32,21 @@ namespace SistemaCrossfit.Controllers
             }
 		}
 
+		[HttpGet("{idStudent}")]
+		[Authorize]
+		public async Task<ActionResult<List<StudentPoints>>> GetStudentPointsByIdStudent(int idStudent)
+		{
+			try
+			{
+				List<StudentPoints> studentPoints = await _studentPointsRepository.GetStudentPointsByIdStudent(idStudent);
+				return Ok(studentPoints);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+		}
+
 		[HttpGet("{idStudent}/{idExercise}")]
 		[Authorize]
 		public async Task<ActionResult<StudentPoints>> GetStudentPointsByIds(int idStudent, int idExercise)

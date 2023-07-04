@@ -18,6 +18,18 @@ namespace SistemaCrossfit.Repositories
 			return await _dbContext.StudentPoints.ToListAsync();
 		}
 
+		public async Task<List<StudentPoints>> GetStudentPointsByIdStudent(int idStudent)
+		{
+			List<StudentPoints>? studentPoints = await _dbContext.StudentPoints.Where(x => x.IdStudent == idStudent).ToListAsync();
+
+			if (studentPoints == null)
+			{
+				throw new Exception("StudentPoints not found!");
+			}
+
+			return studentPoints;
+		}
+
 		public async Task<StudentPoints> GetByIds(int idStudent, int idExercise)
 		{
 			StudentPoints? studentPoints = await _dbContext.StudentPoints.FirstOrDefaultAsync(x => x.IdStudent == idStudent && x.IdExercise == idExercise);
