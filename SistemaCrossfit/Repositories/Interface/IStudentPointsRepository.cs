@@ -7,6 +7,7 @@ namespace SistemaCrossfit.Repositories.Interface
     {
         Task<List<StudentPoints>> GetAll();
 		Task<List<StudentPoints>> GetStudentPointsByIdStudent(int idStudent);
+		Task<int> GetTotalStudentPointsByIdStudent(int idStudent);
         Task<StudentPoints> GetByIds(int idStudent, int idExercise);
         Task<StudentPoints> Create(StudentPointsRequest requestBody);
         Task<StudentPoints> Update(StudentPointsRequest requestBody, int idStudent, int idExercise);
