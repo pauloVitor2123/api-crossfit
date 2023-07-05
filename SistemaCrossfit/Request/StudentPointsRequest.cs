@@ -4,6 +4,6 @@ namespace SistemaCrossfit.Request
 	{
 		public int? IdStudent { get; set; }
 		public int? IdExercise { get; set; }
-		public int Points { get; set; }
+		public int? Points { get; set; }
 	}
 }
