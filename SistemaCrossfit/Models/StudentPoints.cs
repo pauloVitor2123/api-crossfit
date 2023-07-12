@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -5,6 +6,10 @@ namespace SistemaCrossfit.Models
 {
 	public class StudentPoints : BaseModel
 	{
+		[Key]
+		[Column("id_student_points")]
+		public int IdStudentPoints { get; set; }
+
 		[Column("id_student")]
 		[ForeignKey("Student")]
 		public int IdStudent { get; set; }

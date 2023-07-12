@@ -32,14 +32,74 @@ namespace SistemaCrossfit.Controllers
             }
 		}
 
-		[HttpGet("{idStudent}")]
+		[HttpGet("{idStudentPoints}")]
 		[Authorize]
-		public async Task<ActionResult<List<StudentPoints>>> GetStudentPointsByIdStudent(int idStudent)
+		public async Task<ActionResult<StudentPoints>> GetStudentPointsById(int idStudentPoints)
 		{
 			try
 			{
-				List<StudentPoints> studentPoints = await _studentPointsRepository.GetStudentPointsByIdStudent(idStudent);
+				StudentPoints studentPoints = await _studentPointsRepository.GetById(idStudentPoints);
 				return Ok(studentPoints);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+		}
+
+		[HttpGet("{idStudent}/{idExercise}")]
+		[Authorize]
+		public async Task<ActionResult<StudentPoints>> GetListStudentPointsByIds(int idStudent, int idExercise)
+		{
+			try
+			{
+				List<StudentPoints> studentPoints = await _studentPointsRepository.GetListByIds(idStudent, idExercise);
+				return Ok(studentPoints);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+		}
+
+		[HttpGet("byStudent/{idStudent}")]
+		[Authorize]
+		public async Task<ActionResult<List<StudentPoints>>> GetListStudentPointsByIdStudent(int idStudent)
+		{
+			try
+			{
+				List<StudentPoints> studentPoints = await _studentPointsRepository.GetListByIdStudent(idStudent);
+				return Ok(studentPoints);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+		}
+
+		[HttpGet("byExercise/{idExercise}")]
+		[Authorize]
+		public async Task<ActionResult<List<StudentPoints>>> GetListStudentPointsByIdExercise(int idExercise)
+		{
+			try
+			{
+				List<StudentPoints> studentPoints = await _studentPointsRepository.GetListByIdExercise(idExercise);
+				return Ok(studentPoints);
+			}
+			catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+		}
+
+		[HttpGet("total/{idStudent}/{idExercise}")]
+		[Authorize]
+		public async Task<ActionResult<int>> GetTotalStudentPointsByIds(int idStudent, int idExercise)
+		{
+			try
+			{
+				int totalStudentPoints = await _studentPointsRepository.GetTotalPointsByIds(idStudent, idExercise);
+				return Ok(totalStudentPoints);
 			}
 			catch (Exception ex)
             {
@@ -53,23 +113,8 @@ namespace SistemaCrossfit.Controllers
 		{
 			try
 			{
-				int totalStudentPoints = await _studentPointsRepository.GetTotalStudentPointsByIdStudent(idStudent);
+				int totalStudentPoints = await _studentPointsRepository.GetTotalPointsByIdStudent(idStudent);
 				return Ok(totalStudentPoints);
-			}
-			catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-		}
-
-		[HttpGet("{idStudent}/{idExercise}")]
-		[Authorize]
-		public async Task<ActionResult<StudentPoints>> GetStudentPointsByIds(int idStudent, int idExercise)
-		{
-			try
-			{
-				StudentPoints studentPoints = await _studentPointsRepository.GetByIds(idStudent, idExercise);
-				return Ok(studentPoints);
 			}
 			catch (Exception ex)
             {
@@ -92,13 +137,13 @@ namespace SistemaCrossfit.Controllers
             }
 		}
 
-		[HttpPut("{idStudent}/{idExercise}")]
+		[HttpPut("{idStudentPoints}")]
 		[Authorize(Roles = "ADMIN")]
-		public async Task<ActionResult<StudentPoints>> UpdateStudentPoints(int idStudent, int idExercise, [FromBody] StudentPointsRequest requestBody)
+		public async Task<ActionResult<StudentPoints>> UpdateStudentPoints(int idStudentPoints, [FromBody] StudentPointsRequest requestBody)
 		{
 			try
 			{
-				StudentPoints e = await _studentPointsRepository.Update(requestBody, idStudent, idExercise);
+				StudentPoints e = await _studentPointsRepository.Update(requestBody, idStudentPoints);
 				return Ok(e);
 			}
 			catch (Exception ex)
@@ -107,13 +152,13 @@ namespace SistemaCrossfit.Controllers
             }
 		}
 
-		[HttpDelete("{idStudent}/{idExercise}")]
+		[HttpDelete("{idStudentPoints}")]
 		[Authorize(Roles = "ADMIN")]
-		public async Task<ActionResult<StudentPoints>> DeleteStudentPointsById(int idStudent, int idExercise)
+		public async Task<ActionResult<StudentPoints>> DeleteStudentPointsById(int idStudentPoints)
 		{
 			try
 			{
-				Boolean deleted = await _studentPointsRepository.Delete(idStudent, idExercise);
+				Boolean deleted = await _studentPointsRepository.Delete(idStudentPoints);
 				return Ok(deleted);
 			}
 			catch (Exception ex)
