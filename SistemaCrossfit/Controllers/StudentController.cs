@@ -112,7 +112,10 @@ namespace SistemaCrossfit.Controllers
             User user = await _userRepository.GetById(student.IdUser);
             user.IdUser = student.IdUser;
             user.Email = studentBody.Email;
-            user.Password = studentBody.Password;
+            if(studentBody.Password != "")
+            {
+                user.Password = studentBody.Password;
+            }
             user.Name = studentBody.Name;
             user.SocialName = studentBody.SocialName;
             student.BirthDate = studentBody.BirthDate;

@@ -15,10 +15,25 @@ namespace SistemaCrossfit.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Class>> GetAll()
+        public async Task<List<ClassDTO>> GetAll()
         {
             var classes = await _dbContext.Class.ToListAsync();
-            foreach (var item in classes)
+            List<ClassDTO> classDTOs = classes.Select(c => new ClassDTO
+            {
+                IdClass = c.IdClass,
+                Name = c.Name,
+                Date = c.Date,
+                StartHour = c.StartHour,
+                EndHour = c.EndHour,
+                Description = c.Description,
+                IdProfessor = c.IdProfessor,
+                Professor = c.Professor,
+                IdStatus = c.IdStatus,
+                Status = c.Status,
+                ConfirmedStudents = null
+            }).ToList();
+
+            foreach (var item in classDTOs)
             {
                 var p = await _dbContext.Professor.FirstOrDefaultAsync(e => e.IdProfessor == item.IdProfessor);
                 if (p == null) throw new Exception("Professor not found!");
@@ -35,10 +50,35 @@ namespace SistemaCrossfit.Repositories
 
                 item.Status = s;
 
+                var studentsCheckInClass = await _dbContext.StudentCheckInClass.Where(e => e.IdClass == item.IdClass).ToListAsync();
+
+                List<StudentDTO> confirmedStudents = new List<StudentDTO>();
+
+                foreach (var studentCheckIn in studentsCheckInClass)
+                {
+                    var student = await _dbContext.Student.FindAsync(studentCheckIn.IdStudent);
+
+                    if (student != null)
+                    {
+                        var user = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == student.IdUser);
+                        if (user != null)
+                        {
+                            var studentDTO = new StudentDTO
+                            {
+                                IdStudent = student.IdStudent,
+                                Name = user.Name
+                            };
+
+                            confirmedStudents.Add(studentDTO);
+                        }
+                    }
+                }
+
+                item.ConfirmedStudents = confirmedStudents;
 
             }
 
-            return classes;
+            return classDTOs;
         }
 
         public async Task<List<ClassDTO>> GetAllClassesWithStudentInfo(int idStudent)
@@ -79,7 +119,7 @@ namespace SistemaCrossfit.Repositories
                     Professor = item.Professor,
                     IdStatus = item.IdStatus,
                     Status = item.Status,
-                    checkin = checkinInClass != null
+                    CheckIn = checkinInClass != null
                 };
 
                 classList.Add(classDto);
@@ -100,17 +140,17 @@ namespace SistemaCrossfit.Repositories
             var classVariable = await _dbContext.Class.FirstOrDefaultAsync(c => c.IdClass == id);
             if (classVariable == null) throw new Exception("Class not found!");
 
-            Professor p = await _dbContext.Professor.FirstOrDefaultAsync(e => e.IdProfessor == classVariable.IdProfessor);
+            var p = await _dbContext.Professor.FirstOrDefaultAsync(e => e.IdProfessor == classVariable.IdProfessor);
             if (p == null) throw new Exception("Professor not found!");
 
             classVariable.Professor = p;
 
-            User u = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == p.IdUser);
+            var u = await _dbContext.User.FirstOrDefaultAsync(e => e.IdUser == p.IdUser);
             if (u == null) throw new Exception("User not found!");
 
             classVariable.Professor.User = u;
 
-            Status s = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == classVariable.IdStatus);
+            var s = await _dbContext.Status.FirstOrDefaultAsync(e => e.IdStatus == classVariable.IdStatus);
             if (s == null) throw new Exception("Status not found!");
 
             classVariable.Status = s;
@@ -152,6 +192,11 @@ namespace SistemaCrossfit.Repositories
             await _dbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        Task<List<Class>> IBaseRepository<Class>.GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

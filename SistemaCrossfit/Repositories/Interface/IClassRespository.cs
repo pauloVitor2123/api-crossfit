@@ -5,6 +5,7 @@ namespace SistemaCrossfit.Repositories.Interface
 {
     public interface IClassRespository : IBaseRepository<Class>
     {
+        new Task<List<ClassDTO>> GetAll();
         Task<List<ClassDTO>> GetAllClassesWithStudentInfo(int idStudent);
         Task<Class> GetByName(string name);
     }
