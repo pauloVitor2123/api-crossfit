@@ -24,6 +24,14 @@ namespace SistemaCrossfit.Factories
             };
             studentPointsList.Add(studentPoints2);
 
+			StudentPoints studentPoints3 = new()
+            {
+                IdStudent = 1,
+                IdExercise = 1,
+                Points = 120
+            };
+            studentPointsList.Add(studentPoints3);
+
             return studentPointsList;
         }
     }
