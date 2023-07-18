@@ -72,7 +72,7 @@ namespace SistemaCrossfit.Services
 
         public async Task<List<PaymentDto>> GetAll()
         {
-            var payments = await _dbContext.Payment.ToListAsync();
+            var payments = await _dbContext.Payment.OrderByDescending(x => x.DueDate).ToListAsync();
 
             var paymentsDto = new List<PaymentDto>();
             foreach (var payment in payments)
@@ -163,7 +163,7 @@ namespace SistemaCrossfit.Services
 
                 var paymentDb = await _dbContext.Payment
                     .Where(x => x.IdStudent == createPaymentRequest.IdStudent)
-                    .OrderByDescending(x => x.IdPayment)
+                    .OrderBy(x => x.IdPayment)
                     .LastOrDefaultAsync();
 
                 var nextDueDate = DateTime.Now.AddMonths(1);
